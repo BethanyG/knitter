@@ -47,10 +47,10 @@
 #undef GL_EXT_vertex_array
 #endif
 
-#include "isosurf.h"
+#include "knitter.hpp"
 
 #if !defined(__WXMSW__) && !defined(__WXPM__)
-#include "../../sample.xpm"
+#include "../img/icons/sample.xpm"
 #endif
 
 // The following part is taken largely unchanged from the original C Version
