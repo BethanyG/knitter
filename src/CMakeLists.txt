@@ -1,6 +1,6 @@
 add_executable(knitter 
 knitter.cpp
-knitter.hpp)
+settings.cpp)
 
 find_package(wxWidgets COMPONENTS base core gl REQUIRED)
 

@@ -1,28 +1,20 @@
 #include "header.hpp"
+#include "vars.hpp"
+#include "settings.hpp"
 #include "knitter.hpp"
 
 #if !defined(__WXMSW__) && !defined(__WXPM__)
 #include "../img/icons/sample.xpm"
 #endif
 
-GLboolean speed_test = GL_FALSE;
-GLboolean use_vertex_arrays = GL_FALSE;
+GLfloat verts[MAXVERTS][3];
+GLfloat norms[MAXVERTS][3];
+GLint numverts;
 
-GLboolean doubleBuffer = GL_TRUE;
+GLfloat xrot;
+GLfloat yrot;
 
-GLboolean smooth = GL_TRUE;
-GLboolean lighting = GL_TRUE;
-
-#define MAXVERTS 10000
-
-static GLfloat verts[MAXVERTS][3];
-static GLfloat norms[MAXVERTS][3];
-static GLint numverts;
-
-static GLfloat xrot;
-static GLfloat yrot;
-
-static void read_surface(const wxChar *filename) {
+void read_surface(const wxChar *filename) {
   FILE *f = wxFopen(filename,_T("r"));
   if (!f) {
     wxString msg = _T("Couldn't read ");
@@ -32,9 +24,9 @@ static void read_surface(const wxChar *filename) {
   }
   numverts = 0;
   while (!feof(f) && numverts<MAXVERTS) {
-    fscanf( f, "%f %f %f  %f %f %f",
-            &verts[numverts][0], &verts[numverts][1], &verts[numverts][2],
-            &norms[numverts][0], &norms[numverts][1], &norms[numverts][2] );
+    fscanf(f, "%f %f %f  %f %f %f",
+           &verts[numverts][0], &verts[numverts][1], &verts[numverts][2],
+           &norms[numverts][0], &norms[numverts][1], &norms[numverts][2]);
     numverts++;
   }
   numverts--;
@@ -42,7 +34,7 @@ static void read_surface(const wxChar *filename) {
   fclose(f);
 }
 
-static void generate_tube() {
+void generate_tube() {
   int stepsCircle = 100;
   int stepsTube = 10;
   float a = 0.2;
@@ -64,7 +56,7 @@ static void generate_tube() {
   wxPrintf(_T("%d vertices, %d triangles\n"), numverts, numverts-2);
 }
 
-static void draw_surface() {
+void draw_surface() {
   GLint i;
   
 #ifdef GL_EXT_vertex_array
@@ -82,7 +74,7 @@ static void draw_surface() {
   }
 }
 
-static void draw1() {
+void draw1() {
   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
   glPushMatrix();
   glRotatef( yrot, 0.0f, 1.0f, 0.0f );
@@ -95,95 +87,6 @@ static void draw1() {
   glFlush();
 }
 
-static void InitMaterials() {
-  static const GLfloat ambient[4] = {0.1f, 0.1f, 0.1f, 1.0f};
-  static const GLfloat diffuse[4] = {0.5f, 1.0f, 1.0f, 1.0f};
-  static const GLfloat position0[4] = {0.0f, 0.0f, 20.0f, 0.0f};
-  static const GLfloat position1[4] = {0.0f, 0.0f, -20.0f, 0.0f};
-  static const GLfloat front_mat_shininess[1] = {60.0f};
-  static const GLfloat front_mat_specular[4] = {0.2f, 0.2f, 0.2f, 1.0f};
-  static const GLfloat front_mat_diffuse[4] = {0.5f, 0.28f, 0.38f, 1.0f};
-  /*
-    static const GLfloat back_mat_shininess[1] = {60.0f};
-    static const GLfloat back_mat_specular[4] = {0.5f, 0.5f, 0.2f, 1.0f};
-    static const GLfloat back_mat_diffuse[4] = {1.0f, 1.0f, 0.2f, 1.0f};
-  */
-  static const GLfloat lmodel_ambient[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-  static const GLfloat lmodel_twoside[1] = {GL_FALSE};
-  
-  glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
-  glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
-  glLightfv(GL_LIGHT0, GL_POSITION, position0);
-  glEnable(GL_LIGHT0);
-  
-  glLightfv(GL_LIGHT1, GL_AMBIENT, ambient);
-  glLightfv(GL_LIGHT1, GL_DIFFUSE, diffuse);
-  glLightfv(GL_LIGHT1, GL_POSITION, position1);
-  glEnable(GL_LIGHT1);
-  
-  glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
-  glLightModelfv(GL_LIGHT_MODEL_TWO_SIDE, lmodel_twoside);
-  glEnable(GL_LIGHTING);
-  
-  glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, front_mat_shininess);
-  glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, front_mat_specular);
-  glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, front_mat_diffuse);
-}
-
-
-static void Init(void) {
-  glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-  
-  glShadeModel(GL_SMOOTH);
-  glEnable(GL_DEPTH_TEST);
-  
-  InitMaterials();
-  
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  glFrustum( -1.0, 1.0, -1.0, 1.0, 5.0, 25.0 );
-  
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-  glTranslatef( 0.0, 0.0, -6.0 );
-  
-#ifdef GL_EXT_vertex_array
-  if (use_vertex_arrays) {
-    glVertexPointerEXT( 3, GL_FLOAT, 0, numverts, verts );
-    glNormalPointerEXT( GL_FLOAT, 0, numverts, norms );
-    glEnable( GL_VERTEX_ARRAY_EXT );
-    glEnable( GL_NORMAL_ARRAY_EXT );
-  }
-#endif
-}
-
-static GLenum Args(int argc, wxChar **argv) {
-  GLint i;
-  
-  for (i = 1; i < argc; i++) {
-    if (wxStrcmp(argv[i], _T("-sb")) == 0) {
-      doubleBuffer = GL_FALSE;
-    }
-    else if (wxStrcmp(argv[i], _T("-db")) == 0) {
-      doubleBuffer = GL_TRUE;
-    }
-    else if (wxStrcmp(argv[i], _T("-speed")) == 0) {
-      speed_test = GL_TRUE;
-      doubleBuffer = GL_TRUE;
-    }
-    else if (wxStrcmp(argv[i], _T("-va")) == 0) {
-      use_vertex_arrays = GL_TRUE;
-    }
-    else {
-      wxString msg = _T("Bad option: ");
-      msg += argv[i];
-      wxMessageBox(msg);
-      return GL_FALSE;
-    }
-  }
-  
-  return GL_TRUE;
-}
 
 MyFrame *frame = NULL;
 IMPLEMENT_APP(MyApp)
