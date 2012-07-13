@@ -2,6 +2,7 @@
 #include "vars.hpp"
 #include "settings.hpp"
 #include "knitter.hpp"
+#include "calculator.hpp"
 
 #if !defined(__WXMSW__) && !defined(__WXPM__)
 #include "../img/icons/sample.xpm"
@@ -14,49 +15,7 @@ GLint numverts;
 GLfloat xrot;
 GLfloat yrot;
 
-void read_surface(const wxChar *filename) {
-  FILE *f = wxFopen(filename,_T("r"));
-  if (!f) {
-    wxString msg = _T("Couldn't read ");
-    msg += filename;
-    wxMessageBox(msg);
-    return;
-  }
-  numverts = 0;
-  while (!feof(f) && numverts<MAXVERTS) {
-    fscanf(f, "%f %f %f  %f %f %f",
-           &verts[numverts][0], &verts[numverts][1], &verts[numverts][2],
-           &norms[numverts][0], &norms[numverts][1], &norms[numverts][2]);
-    numverts++;
-  }
-  numverts--;
-  wxPrintf(_T("%d vertices, %d triangles\n"), numverts, numverts-2);
-  fclose(f);
-}
-
-void generate_tube() {
-  int stepsCircle = 100;
-  int stepsTube = 10;
-  float a = 0.2;
-  float l = 1.5;
-  float step = 2 * 3.1415 / stepsCircle;
-  for (int j = 0; j < stepsTube; j++) {
-    for (int i = 0; i <= stepsCircle; i++) {
-      int n = 2 * j * (stepsCircle + 1) + i * 2;
-      verts[n][1] = verts[n + 1][1] = a * cos(step * i);
-      verts[n][2] = verts[n + 1][2] = a * sin(step * i);
-      verts[n][0] = -l / 2 + l * j / stepsTube;
-      verts[n + 1][0] = -l / 2 + l * (j + 1) / stepsTube;
-      norms[n][1] = norms[n + 1][1] = a * cos(step * i);
-      norms[n][2] = norms[n + 1][2] = a * sin(step * i);
-      norms[n][0] = norms[n + 1][0] = 0;
-    }
-  }
-  numverts = (stepsCircle + 1) * 2 * stepsTube; 
-  wxPrintf(_T("%d vertices, %d triangles\n"), numverts, numverts-2);
-}
-
-void draw_surface() {
+static void DrawSurface() {
   GLint i;
   
 #ifdef GL_EXT_vertex_array
@@ -74,44 +33,33 @@ void draw_surface() {
   }
 }
 
-void draw1() {
-  glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+static void DrawScene() {
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glPushMatrix();
-  glRotatef( yrot, 0.0f, 1.0f, 0.0f );
-  glRotatef( xrot, 1.0f, 0.0f, 0.0f );
+  glRotatef(yrot, 0.0f, 1.0f, 0.0f);
+  glRotatef(xrot, 1.0f, 0.0f, 0.0f);
   
-  draw_surface();
+  DrawSurface();
   
   glPopMatrix();
   
   glFlush();
 }
 
-
 MyFrame *frame = NULL;
 IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit() {
   Args(argc, argv);
-  
-  // Create the main frame window
   frame = new MyFrame(NULL, wxT("wxWidgets OpenGL Isosurf Sample"),
                       wxDefaultPosition, wxDefaultSize);
-  
-  // Give it an icon
   frame->SetIcon(wxICON(sample));
-
-  // Make a menubar
   wxMenu *fileMenu = new wxMenu;
-  
   fileMenu->Append(wxID_EXIT, _T("E&xit"));
   wxMenuBar *menuBar = new wxMenuBar;
   menuBar->Append(fileMenu, _T("&File"));
   frame->SetMenuBar(menuBar);
-  
-  // Make a TestGLCanvas
-  
-  // JACS
+
 #ifdef __WXMSW__
   int *gl_attrib = NULL;
 #else
@@ -137,13 +85,11 @@ bool MyApp::OnInit() {
                                      wxDefaultSize, 0, _T("TestGLCanvas"), 
                                      gl_attrib );
 
-  // Show the frame
   frame->Show(true);
 
   frame->m_canvas->SetCurrent();
-  // read_surface( _T("data/isosurf.dat") );
-  generate_tube();
     
+  Calculator::GetSurfacePoints();
   Init();
 
   return true;
@@ -205,7 +151,7 @@ void TestGLCanvas::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 
   SetCurrent();
 
-  draw1();
+  DrawScene();
   SwapBuffers();
 }
 
