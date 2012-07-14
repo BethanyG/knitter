@@ -20,7 +20,7 @@ class Calculator {
                                                     Vector* rnorms, 
                                                     int number);
   static void GetSinTrace(Point3D* points, Vector* normals, int number);
-  static void GetKnitStitchTrace(float k, float r, Point3D c, 
+  static void GetKnitStitchTrace(float a, float k, float r, Point3D c, 
                                  Point3D* points, Vector* normals, int number);
 
   static void ReadSurface(const wxChar *filename);

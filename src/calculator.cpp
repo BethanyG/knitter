@@ -29,7 +29,7 @@ void Calculator::GetPointsAroundCentreWithNormalVector(Point3D c,
                                                        Point3D* rverts,
                                                        Vector* rnorms, 
                                                        int number) {
-  Vector u = Calculator::Normalize(Calculator::CrossProduct(n, Vector(1, 1, 1)));
+  Vector u = Calculator::Normalize(Calculator::CrossProduct(n, Vector(1, 2, 3)));
   Vector v = Calculator::Normalize(Calculator::CrossProduct(n, u));
   double delta = 2 * 3.1415 / number;
   double t = 0;  
@@ -53,20 +53,22 @@ void Calculator::GetSinTrace(Point3D* points, Vector* normals, int number) {
   }
 }
 
-void Calculator::GetKnitStitchTrace(float k, float r, Point3D c,
+void Calculator::GetKnitStitchTrace(float a, float k, float r, Point3D c,
                                     Point3D* points, 
                                     Vector* normals, int number) {
   int part = (number - 1) / 8;
   float pi = 3.1415;
   float step = pi / 2 / part;
+  float curve_top = -a;
+  float curve_down = -a;
   for (int i = 0; i <= part; i++) {
-    double t = (part - i) * step;
-    points[i] = Point3D(c.x + k * r * cos(t) - 2 * r, 
-                        c.y + -r * sin(t) - r, 
-                        c.z);
-    normals[i] = Vector(k * r * sin(t), 
-                        r * cos(t), 
-                        0);
+    double t = i * step;
+    points[i] = Point3D(c.x + k * r * cos(t - pi/2) - 2 * r, 
+                        c.y + r * sin(t - pi/2) - r, 
+                        c.z + (cos(2 * t) + 1) * curve_down);
+    normals[i] = Vector(-k * r * sin(t - pi/2), 
+                        r * cos(t - pi/2), 
+                        2 * (-sin(2 * t)) * curve_down);
   }
   for (int i = part + 1; i <= part * 3; i++) {
     double t = (i - part) * step;
@@ -81,10 +83,10 @@ void Calculator::GetKnitStitchTrace(float k, float r, Point3D c,
     double t = (i - part * 3) * step;
     points[i] = Point3D(c.x + (-k) * r * cos(t), 
                         c.y + r * sin(t) + r, 
-                        c.z);
+                        c.z + (-cos(2 * t) + 1) * curve_top);
     normals[i] = Vector(k * r * sin(t), 
                         r * cos(t), 
-                        0);
+                        2 * sin(2 * t) * curve_top);
   }
   for (int i = part * 5 + 1; i <= part * 7; i++) {
     double t = (i - part * 5) * step;
@@ -99,14 +101,15 @@ void Calculator::GetKnitStitchTrace(float k, float r, Point3D c,
     double t = (i - part * 7) * step;
     points[i] = Point3D(c.x + (-k) * r * cos(t) + 2 * r, 
                         c.y + (-r) * sin(t) - r, 
-                        c.z);
+                        c.z + (- cos(2 * t) + 1) * curve_down);
     normals[i] = Vector(k * r * sin(t), 
                         -r * cos(t), 
-                        0);
+                        2 * sin(2 * t) * curve_down);
   }
-  // for (int i = 0; i <= part * 8; i++) {
-  //   printf("%d %f %f %f\n", i, normals[i].x, normals[i].y, normals[i].z);
-  // }
+  for (int i = 0; i <= part * 8; i++) {
+    printf("Point %d %f %f %f\t", i, points[i].x, points[i].y, points[i].z);
+    printf("Normal %d %f %f %f\n", i, normals[i].x, normals[i].y, normals[i].z);
+  }
 }
 
 void Calculator::DrawCurvedTube(float a, float k, float r, Point3D c, 
@@ -117,7 +120,7 @@ void Calculator::DrawCurvedTube(float a, float k, float r, Point3D c,
   
   Point3D* points = new Point3D[stepsTube + 1];
   Vector* normals = new Vector[stepsTube + 1];
-  Calculator::GetKnitStitchTrace(k, r, c, points, normals, stepsTube);
+  Calculator::GetKnitStitchTrace(a, k, r, c, points, normals, stepsTube);
   
   Point3D* rverts0 = new Point3D[stepsCircle + 1];
   Vector* rnorms0 = new Vector[stepsCircle + 1];  

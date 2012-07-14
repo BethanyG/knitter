@@ -102,7 +102,7 @@ bool MyApp::OnInit() {
   frame->m_canvas->SetCurrent();
     
 //Calculator::GetSurfacePoints();
-float a = 0.07;
+float a = 0.12;
 float k = 1.3;
 float r = 0.25;
 model = Model(a, k, r);
