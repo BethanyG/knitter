@@ -30,18 +30,13 @@ static void DrawSurface() {
       for (int l = 0; l < model._stitches; l++) {
         glBegin(GL_TRIANGLE_STRIP);
         for (i = 0; i < numverts; i++) {
+          glColor3f(0, 0, 1);
           glNormal3fv(model._norms[k][l][i]);
           glVertex3fv(model._verts[k][l][i]);
         }
         glEnd();
       }
     }
-    // glBegin( GL_TRIANGLE_STRIP );
-    // for (i = 0; i < numverts; i++) {
-    //   glNormal3fv(norms[i]);
-    //   glVertex3fv(verts[i]);
-    // }
-    // glEnd();
   }
 }
 
@@ -50,6 +45,7 @@ static void DrawScene() {
   glPushMatrix();
   glRotatef(yrot, 0.0f, 1.0f, 0.0f);
   glRotatef(xrot, 1.0f, 0.0f, 0.0f);
+  glTranslatef(-2.5, -2.5, 0.0f);
   
   DrawSurface();
   
@@ -72,18 +68,18 @@ bool MyApp::OnInit() {
   menuBar->Append(fileMenu, _T("&File"));
   frame->SetMenuBar(menuBar);
 
-#ifdef __WXMSW__
+  //#ifdef __WXMSW__
   int *gl_attrib = NULL;
-#else
-  int gl_attrib[20] = { WX_GL_RGBA, WX_GL_MIN_RED, 1, WX_GL_MIN_GREEN, 1,
-                        WX_GL_MIN_BLUE, 1, WX_GL_DEPTH_SIZE, 1,
-                        WX_GL_DOUBLEBUFFER,
-#  if defined(__WXMAC__) || defined(__WXCOCOA__)
-                        GL_NONE };
-#  else
-  None };
-#  endif
-#endif
+// #else
+//   int gl_attrib[20] = { WX_GL_RGBA, WX_GL_MIN_RED, 1, WX_GL_MIN_GREEN, 1,
+//                         WX_GL_MIN_BLUE, 1, WX_GL_DEPTH_SIZE, 1,
+//                         WX_GL_DOUBLEBUFFER,
+// #  if defined(__WXMAC__) || defined(__WXCOCOA__)
+//                         GL_NONE };
+// #  else
+//   None };
+// #  endif
+// #endif
 
   if(!doubleBuffer) {
     printf("don't have double buffer, disabling\n");
