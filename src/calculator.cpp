@@ -115,7 +115,7 @@ void Calculator::GetKnitStitchTrace(float a, float k, float r, Point3D c,
 void Calculator::DrawCurvedTube(float a, float k, float r, Point3D c, 
                                 GLfloat verts[][3], GLfloat norms[][3]) {
   int stepsCircle = 20;
-  int stepsTube = 10 * 8 + 1;
+  int stepsTube = 20 * 8 + 1;
   float step = 2 * 3.1415 / stepsCircle;
   
   Point3D* points = new Point3D[stepsTube + 1];

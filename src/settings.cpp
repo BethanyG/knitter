@@ -10,13 +10,18 @@ GLboolean lighting = GL_TRUE;
 
 void InitMaterials() {
   static const GLfloat ambient[4] = {0.0f, 0.0f, 0.0f, 1.0f};
-  static const GLfloat diffuse[4] = {0.0f, 0.0f, 1.0f, 1.0f};
-  static const GLfloat position0[4] = {1.0, 0.0, 2.0f, 0.0f};
+  static const GLfloat diffuse[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+  static const GLfloat position0[4] = {7.0, 7.0, 7.0f, 0.0f};
 
   static const GLfloat front_mat_shininess[1] = {60.0f};
-  static const GLfloat front_mat_specular[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-  static const GLfloat front_mat_diffuse[4] = {0.0f, 0.0f, 1.0f, 1.0f};
+  static const GLfloat front_mat_specular[4] = {0.2f, 0.2f, 0.2f, 1.0f};
+  static const GLfloat front_mat_diffuse[4] = {0.6f, 0.0f, 0.7f, 1.0f};
   static const GLfloat lmodel_ambient[4] = {0.0f, 0.0f, 0.0f, 1.0f};
+  
+  glClearColor(0.7f, 0.3f, 0.9f, 0.0f);
+  
+  glShadeModel(GL_SMOOTH);
+  glEnable(GL_DEPTH_TEST);
   
   glEnable(GL_NORMALIZE);
   glLightfv(GL_LIGHT5, GL_AMBIENT, ambient);
@@ -33,30 +38,15 @@ void InitMaterials() {
 }
 
 void Init(float xl, float xr, float yb, float yt) {
-  glClearColor(0.5f, 0.5f, 0.5f, 0.0f);
-  
-  //glShadeModel(GL_SMOOTH);
-  glEnable(GL_DEPTH_TEST);
-  
   InitMaterials();
   
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  //glFrustum(xl, xr, yb, yt, 5.0, 25.0);
   glOrtho(xl, xr, yb, yt, 0.1, 25.0);  
   
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  glTranslatef(2.5, 2.5, -6.0);
-  
-// #ifdef GL_EXT_vertex_array
-//   if (use_vertex_arrays) {
-//     glVertexPointerEXT(3, GL_FLOAT, 0, numverts, verts);
-//     glNormalPointerEXT(GL_FLOAT, 0, numverts, norms);
-//     glEnable(GL_VERTEX_ARRAY_EXT);
-//     glEnable(GL_NORMAL_ARRAY_EXT);
-//   }
-// #endif
+  glTranslatef((xl + xr) / 2, (yb + yt) / 2, -6.0);
 }
 
 GLenum Args(int argc, wxChar **argv) {

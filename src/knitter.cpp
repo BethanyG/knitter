@@ -15,6 +15,9 @@ GLint numverts;
 GLfloat xrot;
 GLfloat yrot;
 
+static float xc;
+static float yc;
+
 Model model(0, 0, 0);
 
 static void DrawSurface() {
@@ -45,7 +48,7 @@ static void DrawScene() {
   glPushMatrix();
   glRotatef(yrot, 0.0f, 1.0f, 0.0f);
   glRotatef(xrot, 1.0f, 0.0f, 0.0f);
-  glTranslatef(-2.5, -2.5, 0.0f);
+  glTranslatef(-xc, -yc, 0.0f);
   
   DrawSurface();
   
@@ -59,8 +62,9 @@ IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit() {
   Args(argc, argv);
-  frame = new MyFrame(NULL, wxT("wxWidgets OpenGL Isosurf Sample"),
-                      wxDefaultPosition, wxDefaultSize);
+  frame = new MyFrame(NULL, wxT("KNITTER"),
+                      wxDefaultPosition, 
+                      wxSize(700, 700));
   frame->SetIcon(wxICON(sample));
   wxMenu *fileMenu = new wxMenu;
   fileMenu->Append(wxID_EXIT, _T("E&xit"));
@@ -68,18 +72,18 @@ bool MyApp::OnInit() {
   menuBar->Append(fileMenu, _T("&File"));
   frame->SetMenuBar(menuBar);
 
-  //#ifdef __WXMSW__
+#ifdef __WXMSW__
   int *gl_attrib = NULL;
-// #else
-//   int gl_attrib[20] = { WX_GL_RGBA, WX_GL_MIN_RED, 1, WX_GL_MIN_GREEN, 1,
-//                         WX_GL_MIN_BLUE, 1, WX_GL_DEPTH_SIZE, 1,
-//                         WX_GL_DOUBLEBUFFER,
-// #  if defined(__WXMAC__) || defined(__WXCOCOA__)
-//                         GL_NONE };
-// #  else
-//   None };
-// #  endif
-// #endif
+#else
+  int gl_attrib[20] = { WX_GL_RGBA, WX_GL_MIN_RED, 1, WX_GL_MIN_GREEN, 1,
+                        WX_GL_MIN_BLUE, 1, WX_GL_DEPTH_SIZE, 1,
+                        WX_GL_DOUBLEBUFFER,
+#  if defined(__WXMAC__) || defined(__WXCOCOA__)
+                        GL_NONE };
+#  else
+  None };
+#  endif
+#endif
 
   if(!doubleBuffer) {
     printf("don't have double buffer, disabling\n");
@@ -98,7 +102,7 @@ bool MyApp::OnInit() {
   frame->m_canvas->SetCurrent();
     
 //Calculator::GetSurfacePoints();
-float a = 0.12;
+float a = 0.13;
 float k = 1.4;
 float r = 0.25;
 model = Model(a, k, r);
@@ -115,7 +119,9 @@ for (int k = 0; k < model._rows; k++) {
                                model._verts[k][l], model._norms[k][l]);
   }
 }
-Init(-0.5, 5.5, -0.5, 5.5);
+xc = model._stitches * 2 * r;
+yc = model._rows * 2 * r;
+Init(-0.5, xc * 2 + 0.5, -0.5, yc * 2 + 0.5);
 
   return true;
 }
