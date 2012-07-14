@@ -1,29 +1,16 @@
 #ifndef _CALCULATOR_HPP_
 #define _CALCULATOR_HPP_
 
-#include "vars.hpp"
-
-struct Vector {
-  double x;
-  double y;
-  double z;
-  Vector(double xx, double yy, double zz) : x(xx), y(yy), z(zz) {}
-  Vector() : x(0), y(0), z(0) {}
-};
-
-struct Point3D {
-  double x;
-  double y;
-  double z;
-  Point3D(double xx, double yy, double zz) : x(xx), y(yy), z(zz) {}
-  Point3D() : x(0), y(0), z(0) {}
-};
+#include "header.hpp"
+#include "structs.hpp"
 
 class Calculator {
  public:
   static void GetSurfacePoints();
- private:  
+  static void DrawCurvedTube(float a, float k, float r, Point3D c, 
+                             GLfloat verts[][3], GLfloat norms[][3]);
 
+ private:  
   static Vector CrossProduct(Vector a, Vector b);
   static Vector Normalize(Vector n);
   static void GetPointsAroundCentreWithNormalVector(Point3D c,
@@ -33,8 +20,8 @@ class Calculator {
                                                     Vector* rnorms, 
                                                     int number);
   static void GetSinTrace(Point3D* points, Vector* normals, int number);
-  static void GetKnitStitchTrace(Point3D* points, Vector* normals, int number);
-  static void DrawCurvedTube();
+  static void GetKnitStitchTrace(float k, float r, Point3D c, 
+                                 Point3D* points, Vector* normals, int number);
 
   static void ReadSurface(const wxChar *filename);
   static void GetStraightTube();

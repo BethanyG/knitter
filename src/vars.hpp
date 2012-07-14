@@ -2,6 +2,7 @@
 #define _VARS_HPP_
 
 #include "header.hpp"
+#include "model.hpp"
 
 extern GLboolean speed_test;
 extern GLboolean use_vertex_arrays;
@@ -14,6 +15,8 @@ extern GLboolean lighting;
 #ifndef MAXVERTS
 #define MAXVERTS 10000
 #endif
+
+extern Model model;
 
 extern GLfloat verts[MAXVERTS][3];
 extern GLfloat norms[MAXVERTS][3];

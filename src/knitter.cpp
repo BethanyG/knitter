@@ -15,6 +15,8 @@ GLint numverts;
 GLfloat xrot;
 GLfloat yrot;
 
+Model model(0, 0, 0);
+
 static void DrawSurface() {
   GLint i;
   
@@ -24,12 +26,22 @@ static void DrawSurface() {
   } else
 #endif
   {
-    glBegin( GL_TRIANGLE_STRIP );
-    for (i=0;i<numverts;i++) {
-      glNormal3fv( norms[i] );
-      glVertex3fv( verts[i] );
+    for (int k = 0; k < model._rows; k++) {
+      for (int l = 0; l < model._stitches; l++) {
+        glBegin(GL_TRIANGLE_STRIP);
+        for (i = 0; i < numverts; i++) {
+          glNormal3fv(model._norms[k][l][i]);
+          glVertex3fv(model._verts[k][l][i]);
+        }
+        glEnd();
+      }
     }
-    glEnd();
+    // glBegin( GL_TRIANGLE_STRIP );
+    // for (i = 0; i < numverts; i++) {
+    //   glNormal3fv(norms[i]);
+    //   glVertex3fv(verts[i]);
+    // }
+    // glEnd();
   }
 }
 
@@ -89,7 +101,14 @@ bool MyApp::OnInit() {
 
   frame->m_canvas->SetCurrent();
     
-  Calculator::GetSurfacePoints();
+//Calculator::GetSurfacePoints();
+model = Model(0.15, 1.2, 0.4);
+model._rows = 1;
+model._stitches = 1;
+model._centres[0][0] = Point3D();
+Calculator::DrawCurvedTube(model._a, model._k, model._r, model._centres[0][0],
+                           model._verts[0][0], model._norms[0][0]);
+
   Init();
 
   return true;

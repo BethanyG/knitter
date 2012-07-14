@@ -59,14 +59,14 @@ void Init() {
   glLoadIdentity();
   glTranslatef(0.0, 0.0, -6.0);
   
-#ifdef GL_EXT_vertex_array
-  if (use_vertex_arrays) {
-    glVertexPointerEXT(3, GL_FLOAT, 0, numverts, verts);
-    glNormalPointerEXT(GL_FLOAT, 0, numverts, norms);
-    glEnable(GL_VERTEX_ARRAY_EXT);
-    glEnable(GL_NORMAL_ARRAY_EXT);
-  }
-#endif
+// #ifdef GL_EXT_vertex_array
+//   if (use_vertex_arrays) {
+//     glVertexPointerEXT(3, GL_FLOAT, 0, numverts, verts);
+//     glNormalPointerEXT(GL_FLOAT, 0, numverts, norms);
+//     glEnable(GL_VERTEX_ARRAY_EXT);
+//     glEnable(GL_NORMAL_ARRAY_EXT);
+//   }
+// #endif
 }
 
 GLenum Args(int argc, wxChar **argv) {
