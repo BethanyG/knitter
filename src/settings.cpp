@@ -10,27 +10,28 @@ GLboolean lighting = GL_TRUE;
 
 void InitMaterials() {
   static const GLfloat ambient[4] = {0.1f, 0.1f, 0.1f, 1.0f};
-  static const GLfloat diffuse[4] = {0.5f, 1.0f, 1.0f, 1.0f};
-  static const GLfloat position0[4] = {0.0f, 0.0f, 20.0f, 0.0f};
-  static const GLfloat position1[4] = {0.0f, 0.0f, -20.0f, 0.0f};
+  static const GLfloat diffuse[4] = {0.8f, 0.8f, 0.8f, 1.0f};
+  static const GLfloat emission[4] = {0.0f, 0.0f, 0.0f, 1.0f};
+  static const GLfloat position0[4] = {0.0, 0.0, 20.0f, 0.0f};
+  static const GLfloat position1[4] = {0.0, 0.0, -20.0f, 0.0f};
   static const GLfloat front_mat_shininess[1] = {60.0f};
-  static const GLfloat front_mat_specular[4] = {0.2f, 0.2f, 0.2f, 1.0f};
-  static const GLfloat front_mat_diffuse[4] = {0.5f, 0.28f, 0.38f, 1.0f};
-  /*
-    static const GLfloat back_mat_shininess[1] = {60.0f};
-    static const GLfloat back_mat_specular[4] = {0.5f, 0.5f, 0.2f, 1.0f};
-    static const GLfloat back_mat_diffuse[4] = {1.0f, 1.0f, 0.2f, 1.0f};
-  */
-  static const GLfloat lmodel_ambient[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-  static const GLfloat lmodel_twoside[1] = {GL_FALSE};
+  static const GLfloat front_mat_specular[4] = {1.0f, 0.0f, 0.0f, 1.0f};
+  static const GLfloat front_mat_diffuse[4] = {0.0f, 0.0f, 0.0f, 1.0f};
+  static const GLfloat back_mat_shininess[1] = {60.0f};
+  static const GLfloat back_mat_specular[4] = {0.0f, 0.0f, 0.0f, 1.0f};
+  static const GLfloat back_mat_diffuse[4] = {0.0f, 0.5f, 1.0f, 1.0f};
+  static const GLfloat lmodel_ambient[4] = {0.0f, 0.0f, 0.3f, 1.0f};
+  static const GLfloat lmodel_twoside[1] = {GL_TRUE};
   
   glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
   glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
+  glLightfv(GL_LIGHT0, GL_EMISSION, emission);
   glLightfv(GL_LIGHT0, GL_POSITION, position0);
   glEnable(GL_LIGHT0);
   
   glLightfv(GL_LIGHT1, GL_AMBIENT, ambient);
   glLightfv(GL_LIGHT1, GL_DIFFUSE, diffuse);
+  glLightfv(GL_LIGHT1, GL_EMISSION, emission);
   glLightfv(GL_LIGHT1, GL_POSITION, position1);
   glEnable(GL_LIGHT1);
   
@@ -38,12 +39,16 @@ void InitMaterials() {
   glLightModelfv(GL_LIGHT_MODEL_TWO_SIDE, lmodel_twoside);
   glEnable(GL_LIGHTING);
   
-  glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, front_mat_shininess);
-  glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, front_mat_specular);
-  glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, front_mat_diffuse);
+  glMaterialfv(GL_FRONT, GL_SHININESS, front_mat_shininess);
+  glMaterialfv(GL_FRONT, GL_SPECULAR, front_mat_specular);
+  glMaterialfv(GL_FRONT, GL_DIFFUSE, front_mat_diffuse);
+
+  glMaterialfv(GL_BACK, GL_SHININESS, back_mat_shininess);
+  glMaterialfv(GL_BACK, GL_SPECULAR, back_mat_specular);
+  glMaterialfv(GL_BACK, GL_DIFFUSE, back_mat_diffuse);
 }
 
-void Init() {
+void Init(float xl, float xr, float yb, float yt) {
   glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
   
   glShadeModel(GL_SMOOTH);
@@ -53,7 +58,8 @@ void Init() {
   
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glFrustum(-1.0, 1.0, -1.0, 1.0, 5.0, 25.0);
+  //glFrustum(xl, xr, yb, yt, 5.0, 25.0);
+  glOrtho(xl, xr, yb, yt, 5.0, 25.0);  
   
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();

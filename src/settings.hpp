@@ -4,8 +4,7 @@
 #include "header.hpp"
 #include "vars.hpp"
 
-void InitMaterials();
-void Init();
+void Init(float xl, float xr, float yb, float yt);
 GLenum Args(int argc, wxChar **argv);
 
 #endif // _SETTINGS_HPP_

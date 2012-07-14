@@ -103,22 +103,23 @@ bool MyApp::OnInit() {
     
 //Calculator::GetSurfacePoints();
 float a = 0.12;
-float k = 1.3;
+float k = 1.4;
 float r = 0.25;
 model = Model(a, k, r);
-model._rows = 2;
-model._stitches = 2;
-model._centres[0][0] = Point3D(-0.5, -0.5, 0);
-model._centres[0][1] = Point3D(0.5, -0.5, 0);
-model._centres[1][0] = Point3D(-0.5, 0.5 - r - a, 0);
-model._centres[1][1] = Point3D(0.5, 0.5 - r - a, 0);
+model._rows = 5;
+model._stitches = 5;
 for (int k = 0; k < model._rows; k++) {
-  for (int l = 0; l < model._rows; l++) {
+  for (int l = 0; l < model._stitches; l++) {
+    model._centres[k][l] = Point3D(0.5 + l * 4 * r, 1 + k * (3 * r - a), 0);
+  }
+}
+for (int k = 0; k < model._rows; k++) {
+  for (int l = 0; l < model._stitches; l++) {
    Calculator::DrawCurvedTube(model._a, model._k, model._r, model._centres[k][l],
                                model._verts[k][l], model._norms[k][l]);
   }
 }
-  Init();
+Init(-0.5, 5.5, -0.5, 5.5);
 
   return true;
 }

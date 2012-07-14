@@ -106,10 +106,10 @@ void Calculator::GetKnitStitchTrace(float a, float k, float r, Point3D c,
                         -r * cos(t), 
                         2 * sin(2 * t) * curve_down);
   }
-  for (int i = 0; i <= part * 8; i++) {
-    printf("Point %d %f %f %f\t", i, points[i].x, points[i].y, points[i].z);
-    printf("Normal %d %f %f %f\n", i, normals[i].x, normals[i].y, normals[i].z);
-  }
+  // for (int i = 0; i <= part * 8; i++) {
+  //   printf("Point %d %f %f %f\t", i, points[i].x, points[i].y, points[i].z);
+  //   printf("Normal %d %f %f %f\n", i, normals[i].x, normals[i].y, normals[i].z);
+  // }
 }
 
 void Calculator::DrawCurvedTube(float a, float k, float r, Point3D c, 
@@ -164,7 +164,7 @@ void Calculator::DrawCurvedTube(float a, float k, float r, Point3D c,
   //   printf("%f %f %f\n", verts[i][0], verts[i][1], verts[i][2]); 
   // }
 
-  wxPrintf(_T("%d vertices, %d triangles\n"), numverts, numverts-2);
+  // wxPrintf(_T("%d vertices, %d triangles\n"), numverts, numverts-2);
 }
 
 void Calculator::ReadSurface(const wxChar *filename) {
