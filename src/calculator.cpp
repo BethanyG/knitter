@@ -52,14 +52,54 @@ void Calculator::GetSinTrace(Point3D* points, Vector* normals, int number) {
   }
 }
 
+void Calculator::GetKnitStitchTrace(Point3D* points, Vector* normals, int number) {
+  int part = (number - 1) / 8;
+  float pi = 3.1415;
+  float step = pi / 2 / part;
+  float k = 1.2;
+  float r = 0.4;
+  for (int i = 0; i <= part; i++) {
+    double t = (part - i) * step;
+    points[i] = Point3D(k * r * cos(t) - 2 * r, -r * sin(t) - r, 0);
+    normals[i] = Vector(k * r * sin(t), r * cos(t), 0);
+  }
+  for (int i = part + 1; i <= part * 3; i++) {
+    double t = (i - part) * step;
+    points[i] = Point3D((2 * r * (1 - k) / pi) * t + r * (-2 + k), 
+                        2 * r / pi * t - r, 0);
+    normals[i] = Vector((2 * r * (1 - k) / pi), 2 * r / pi, 0);
+  }
+  for (int i = part * 3; i <= part * 5; i++) {
+    double t = (i - part * 3) * step;
+    points[i] = Point3D(-k * r * cos(t), r * sin(t) + r, 0);
+    normals[i] = Vector(k * r * sin(t), r * cos(t), 0);
+  }
+  for (int i = part * 5 + 1; i <= part * 7; i++) {
+    double t = (i - part * 5) * step;
+    points[i] = Point3D((2 * r * (1 - k) / pi) * t + r * k, 
+                        -2 * r / pi * t + r, 0);
+    normals[i] = Vector((2 * r * (1 - k) / pi), -2 * r / pi, 0);
+  }
+  for (int i = part * 7; i <= part * 8; i++) {
+    double t = (i - part * 7) * step;
+    points[i] = Point3D(-k * r * cos(t) + 2 * r, -r * sin(t) - r, 0);
+    normals[i] = Vector(k * r * sin(t), -r * cos(t), 0);
+  }
+  for (int i = 0; i <= part * 8; i++) {
+    printf("%d %f %f %f\n", i, normals[i].x, normals[i].y, normals[i].z);
+  }
+}
+
 void Calculator::DrawCurvedTube() {
   int stepsCircle = 20;
-  int stepsTube = 20;
-  float a = 0.2;
+  int stepsTube = 10 * 8 + 1;
+  float a = 0.15;
   float step = 2 * 3.1415 / stepsCircle;
+  
   Point3D* points = new Point3D[stepsTube + 1];
   Vector* normals = new Vector[stepsTube + 1];
-  Calculator::GetSinTrace(points, normals, stepsTube);
+  Calculator::GetKnitStitchTrace(points, normals, stepsTube);
+  
   Point3D* rverts0 = new Point3D[stepsCircle + 1];
   Vector* rnorms0 = new Vector[stepsCircle + 1];  
   Calculator::GetPointsAroundCentreWithNormalVector(points[0], a, normals[0],

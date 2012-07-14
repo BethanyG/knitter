@@ -33,6 +33,7 @@ class Calculator {
                                                     Vector* rnorms, 
                                                     int number);
   static void GetSinTrace(Point3D* points, Vector* normals, int number);
+  static void GetKnitStitchTrace(Point3D* points, Vector* normals, int number);
   static void DrawCurvedTube();
 
   static void ReadSurface(const wxChar *filename);
