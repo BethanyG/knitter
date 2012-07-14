@@ -22,49 +22,15 @@ Vector Calculator::Normalize(Vector n) {
   return a;
 }
 
-double Calculator::MinFrom3(double a, double b, double c) {
-  double min;
-  if (a < 0) a = -a; else if (a == 0) a = 1e10;
-  if (b < 0) b = -b; else if (b == 0) b = 1e10;
-  if (c < 0) c = -c; else if (c == 0) c = 1e10;
-  min = b <= a ? b : a;
-  min = c <= min ? c : min;
-  printf("%f %f %f %f\n", a, b, c, min);
-  return min;
-}
-
-Vector Calculator::GetUVector(Vector n) {
-  double min = Calculator::MinFrom3(n.x, n.y, n.z);
-  Vector u;  
-  if (min == n.x) 
-    u = Calculator::CrossProduct(n, Vector(min, 0, 0));
-  else if (min == n.y)
-    u = Calculator::CrossProduct(n, Vector(0, min, 0));
-  else
-    u = Calculator::CrossProduct(n, Vector(0, 0, min)); 
-  u = Calculator::Normalize(u);
-  return u;
-}
-
-Vector Calculator::GetVVector(Vector n, Vector u) {
-  Vector v;
-  v = Calculator::CrossProduct(n, u);
-  v = Calculator::Normalize(v);
-  return v;
-}
-
 void Calculator::GetPointsAroundCentreWithNormalVector(Point3D c,
                                                        double r, 
                                                        Vector n,
                                                        Point3D* rverts,
                                                        Vector* rnorms, 
                                                        int number) {
-  Vector u = Calculator::GetUVector(n);
-  Vector v = Calculator::GetVVector(n, u);
+  Vector u = Calculator::Normalize(Calculator::CrossProduct(n, Vector(1, 1, 1)));
+  Vector v = Calculator::Normalize(Calculator::CrossProduct(n, u));
   double delta = 2 * 3.1415 / number;
-  printf("%f %f %f \n", c.x, c.y, c.z);
-  printf("%f %f %f -> %f %f %f -> %f %f %f\n", 
-         n.x, n.y, n.z, u.x, u.y, u.z, v.x, v.y, v.z);
   double t = 0;  
   for (int i = 0; i <= number; i++) {
     t = delta * i;
@@ -77,9 +43,7 @@ void Calculator::GetPointsAroundCentreWithNormalVector(Point3D c,
   }
 }
 
-void Calculator::GetTraceAndNormals(Point3D* points, 
-                                    Vector* normals, 
-                                    int number) {
+void Calculator::GetSinTrace(Point3D* points, Vector* normals, int number) {
   float step = 3.1415 / number;
   for (int i = 0; i <= number; i++) {
     double x = i * step / 3.1415;
@@ -95,7 +59,7 @@ void Calculator::DrawCurvedTube() {
   float step = 2 * 3.1415 / stepsCircle;
   Point3D* points = new Point3D[stepsTube + 1];
   Vector* normals = new Vector[stepsTube + 1];
-  Calculator::GetTraceAndNormals(points, normals, stepsTube);
+  Calculator::GetSinTrace(points, normals, stepsTube);
   Point3D* rverts0 = new Point3D[stepsCircle + 1];
   Vector* rnorms0 = new Vector[stepsCircle + 1];  
   Calculator::GetPointsAroundCentreWithNormalVector(points[0], a, normals[0],
@@ -133,8 +97,8 @@ void Calculator::DrawCurvedTube() {
   delete[] rnorms0;
   delete[] points;
   delete[] normals;
-  numverts = (stepsCircle + 1) * (stepsTube + 1) * 2;
-  // for (int i = 0; i < 20; i++) {
+  numverts = (stepsCircle + 1) * (stepsTube) * 2;
+  // for (int i = numverts - 10; i < numverts; i++) {
   //   printf("%f %f %f\n", verts[i][0], verts[i][1], verts[i][2]); 
   // }
 

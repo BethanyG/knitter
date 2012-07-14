@@ -26,18 +26,13 @@ class Calculator {
 
   static Vector CrossProduct(Vector a, Vector b);
   static Vector Normalize(Vector n);
-  static double MinFrom3(double a, double b, double c);
-  static Vector GetUVector(Vector n);
-  static Vector GetVVector(Vector n, Vector u);
-  static void GetPointsAroundCentreWithNormalVector(Point3D C,
+  static void GetPointsAroundCentreWithNormalVector(Point3D c,
                                                     double r, 
                                                     Vector n,
                                                     Point3D* rverts,
                                                     Vector* rnorms, 
                                                     int number);
-  static void GetTraceAndNormals(Point3D* points, 
-                                 Vector* normals, 
-                                 int number);
+  static void GetSinTrace(Point3D* points, Vector* normals, int number);
   static void DrawCurvedTube();
 
   static void ReadSurface(const wxChar *filename);
