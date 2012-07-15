@@ -22,6 +22,8 @@ class Calculator {
   static void GetSinTrace(Point3D* points, Vector* normals, int number);
   static void GetKnitStitchTrace(float a, float k, float r, Point3D c, 
                                  Point3D* points, Vector* normals, int number);
+  static void GetKnitStitchTrace2(float a, float k, float r, Point3D c, 
+                                  Point3D* points, Vector* normals, int number);
 
   static void ReadSurface(const wxChar *filename);
   static void GetStraightTube();

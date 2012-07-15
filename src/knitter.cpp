@@ -102,7 +102,7 @@ bool MyApp::OnInit() {
   frame->m_canvas->SetCurrent();
     
 //Calculator::GetSurfacePoints();
-float a = 0.13;
+float a = 0.15;
 float k = 1.4;
 float r = 0.25;
 model = Model(a, k, r);
@@ -110,7 +110,7 @@ model._rows = 5;
 model._stitches = 5;
 for (int k = 0; k < model._rows; k++) {
   for (int l = 0; l < model._stitches; l++) {
-    model._centres[k][l] = Point3D(0.5 + l * 4 * r, 1 + k * (3 * r - a), 0);
+    model._centres[k][l] = Point3D(0.5 + l * 4 * r, 1 + k * (3 * r - a / 2), 0);
   }
 }
 for (int k = 0; k < model._rows; k++) {

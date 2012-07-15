@@ -15,13 +15,15 @@ void InitMaterials() {
 
   static const GLfloat front_mat_shininess[1] = {60.0f};
   static const GLfloat front_mat_specular[4] = {0.2f, 0.2f, 0.2f, 1.0f};
-  static const GLfloat front_mat_diffuse[4] = {0.6f, 0.0f, 0.7f, 1.0f};
+  static const GLfloat front_mat_diffuse[4] = {0.6f, 0.0f, 0.8f, 1.0f};
   static const GLfloat lmodel_ambient[4] = {0.0f, 0.0f, 0.0f, 1.0f};
   
   glClearColor(0.7f, 0.3f, 0.9f, 0.0f);
   
   glShadeModel(GL_SMOOTH);
   glEnable(GL_DEPTH_TEST);
+  //glPolygonMode(GL_FRONT, GL_LINE);
+  //glPolygonMode(GL_BACK, GL_LINE);
   
   glEnable(GL_NORMALIZE);
   glLightfv(GL_LIGHT5, GL_AMBIENT, ambient);
