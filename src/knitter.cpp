@@ -3,6 +3,7 @@
 #include "settings.hpp"
 #include "knitter.hpp"
 #include "calculator.hpp"
+#include "pattern.hpp"
 
 #if !defined(__WXMSW__) && !defined(__WXPM__)
 #include "../img/icons/sample.xpm"
@@ -78,6 +79,8 @@ bool MyApp::OnInit() {
   frame->Show(true);
   frame->m_canvas->SetCurrent();
     
+  Pattern pattern("+++++++++", 3, 3);
+
     float a = 0.15;
     float k = 1.4;
     float r = 0.25;
