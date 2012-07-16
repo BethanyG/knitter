@@ -2,6 +2,8 @@
 #include "calculator.hpp"
 #include "vars.hpp"
 
+static float pi = 3.1415;
+
 void Calculator::GetSurfacePoints() {
   Calculator::DrawCurvedTube(0.15, 1.2, 0.4, Point3D(), verts, norms);
 }
@@ -29,7 +31,7 @@ void Calculator::GetPointsAroundCentreWithNormalVector(Point3D c,
                                                        Point3D* rverts,
                                                        Vector* rnorms, 
                                                        int number) {
-  Vector u = Calculator::Normalize(Calculator::CrossProduct(n, Vector(1, 3, 5)));
+  Vector u = Calculator::Normalize(Calculator::CrossProduct(n, Vector(1, 1, 2)));
   Vector v = Calculator::Normalize(Calculator::CrossProduct(n, u));
   double delta = 2 * 3.1415 / number;
   double t = 0;  
@@ -53,11 +55,85 @@ void Calculator::GetSinTrace(Point3D* points, Vector* normals, int number) {
   }
 }
 
+float fx(float t, float k, float r) {
+  // t and t + pi are equal in this situation
+  if ((t >= 0) && (t <= pi / 4)) return k * r * sin(2 * t) + (-2 * r);
+  if ((t >= pi / 4) && (t <= 3 * pi / 4)) return (k - 1) * r * sin(2 * t) + (-r);
+  if ((t >= 3 * pi / 4) && (t <= 5 * pi / 4)) return k * r * sin(2 * t);
+  if ((t >= 5 * pi / 4) && (t <= 7 * pi / 4)) return (k - 1) * r * sin(2 * t) + r;
+  if ((t >= 7 * pi / 4) && (t <= 8 * pi / 4)) return k * r * sin(2 * t) + 2 * r;
+}
+
+float px(float t, float k, float r) {
+  // t and t + pi are equal in this situation
+  if (((t >= 0) && (t <= pi / 4)) ||
+      ((t >= 3 * pi / 4) && (t <= 5 * pi / 4)) ||
+      ((t >= 7 * pi / 4) && (t <= 8 * pi / 4))) return k * (r * cos(2 * t));
+  else return (k - 1) * (r * cos(2 * t));
+}
+
+float fy(float t, float k, float r) {
+  // t + pi gives -
+  return -2 * r * cos(t);
+}
+
+float py(float t, float k, float r) {
+  // t + pi gives -
+  return 2 * r * sin(t);
+}
+
+float fz(float t, float k, float r, float s) {
+//  if ((t >= 0) && (t <= pi / 8)) return s * sin(4 * t);
+
+  if ((t >= 0) && (t <= pi / 8)) return s;
+  if ((t >= pi / 8) && (t <= 3 * pi / 8)) return s / 2 * cos(4 * t - pi / 2) + s / 2;
+
+  if ((t >= 5 * pi / 8) && (t <= 7 * pi / 8)) return s / 2 * cos(4 * t + pi / 2) + s / 2;
+  if ((t >= 7 * pi / 8) && (t <= pi)) return s;
+
+  if ((t >= pi) && (t <= 9 * pi / 8)) return s;
+  if ((t >= 9 * pi / 8) && (t <= 11 * pi / 8)) return s / 2 * cos(4 * t - pi / 2) + s / 2;
+
+  if ((t >= 13 * pi / 8) && (t <= 15 * pi / 8)) return s / 2 * cos(4 * t + pi / 2) + s / 2;
+  if ((t >= 15 * pi / 8) && (t <= 2 * pi)) return s;
+
+  return 0;
+}
+
+float pz(float t, float k, float r, float s){
+//  if ((t >= 0) && (t <= pi / 8)) return s * 4 * cos(4 * t);
+
+  if ((t >= pi / 8) && (t <= 3 * pi / 8)) return s / 2 * (-sin(4 * t - pi / 2) * 4);
+
+  if ((t >= 5 * pi / 8) && (t <= 7 * pi / 8)) return s / 2 * (-sin(4 * t + pi / 2) * 4);
+
+  if ((t >= 9 * pi / 8) && (t <= 11 * pi / 8)) return s / 2 * (-sin(4 * t - pi / 2) * 4);
+
+  if ((t >= 13 * pi / 8) && (t <= 15 * pi / 8)) return s / 2 * (-sin(4 * t + pi / 2) * 4);
+
+  return 0;
+}
+
 void Calculator::GetKnitStitchTrace(float a, float k, float r, Point3D c,
+                                    Point3D* points,
+                                    Vector* normals, int number) {
+  int part = (number - 1) / 8;
+  float step = pi / 4 / part;
+  for (int i = 0; i <= 8 * part; i++){
+    float t = i * step;
+    points[i] = Point3D(c.x + fx(t, k, r), c.y + fy(t, k, r), c.z + fz(t, k, r, -a));
+    normals[i] =  Vector(px(t, k, r), py(t, k, r), pz(t, k, r, -a));
+  }
+  for (int i = 0; i <= part * 8; i++) {
+    printf("Point %d %f %f %f\t", i, points[i].x, points[i].y, points[i].z);
+    printf("Normal %d %f %f %f\n", i, normals[i].x, normals[i].y, normals[i].z);
+  }
+}
+
+void Calculator::GetKnitStitchTrace1(float a, float k, float r, Point3D c,
                                     Point3D* points, 
                                     Vector* normals, int number) {
   int part = (number - 1) / 8;
-  float pi = 3.1415;
   float step = pi / 4 / part;
   float curve_top = -a;
   float curve_down = -a;
@@ -174,7 +250,7 @@ void Calculator::GetKnitStitchTrace2(float a, float k, float r, Point3D c,
 void Calculator::DrawCurvedTube(float a, float k, float r, Point3D c, 
                                 GLfloat verts[][3], GLfloat norms[][3]) {
   int stepsCircle = 8;
-  int stepsTube = 6 * 8 + 1;
+  int stepsTube = 10 * 8 + 1;
   float step = 2 * 3.1415 / stepsCircle;
   
   Point3D* points = new Point3D[stepsTube + 1];

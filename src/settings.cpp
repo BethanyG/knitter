@@ -22,8 +22,8 @@ void InitMaterials() {
   
   glShadeModel(GL_SMOOTH);
   glEnable(GL_DEPTH_TEST);
-  //glPolygonMode(GL_FRONT, GL_LINE);
-  //glPolygonMode(GL_BACK, GL_LINE);
+//  glPolygonMode(GL_FRONT, GL_LINE);
+//  glPolygonMode(GL_BACK, GL_LINE);
   
   glEnable(GL_NORMALIZE);
   glLightfv(GL_LIGHT5, GL_AMBIENT, ambient);
