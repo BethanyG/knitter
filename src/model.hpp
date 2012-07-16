@@ -16,6 +16,7 @@ class Model {
   int _stitches;
   GLfloat _verts[MAX_ROWS][MAX_STITCHES][10000][3];
   GLfloat _norms[MAX_ROWS][MAX_STITCHES][10000][3];
+  GLint _numverts[MAX_ROWS][MAX_STITCHES];
   Point3D _centres[MAX_ROWS][MAX_STITCHES];
  public:
   Model(float a, float k, float r) : _a(a), _k(k), _r(r) {}

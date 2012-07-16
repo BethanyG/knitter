@@ -6,9 +6,8 @@
 
 class Calculator {
  public:
-  static void GetSurfacePoints();
-  static void DrawCurvedTube(float a, float k, float r, Point3D c, 
-                             GLfloat verts[][3], GLfloat norms[][3]);
+  static void DrawCurvedTube(float a, float k, float r, Point3D c,
+                             GLfloat verts[][3], GLfloat norms[][3], GLint& numverts);
 
  private:  
   static Vector CrossProduct(Vector a, Vector b);
@@ -19,16 +18,8 @@ class Calculator {
                                                     Point3D* rverts,
                                                     Vector* rnorms, 
                                                     int number);
-  static void GetSinTrace(Point3D* points, Vector* normals, int number);
-  static void GetKnitStitchTrace(float a, float k, float r, Point3D c, 
+  static void GetKnitStitchTrace(float a, float k, float r, Point3D c,
                                  Point3D* points, Vector* normals, int number);
-  static void GetKnitStitchTrace1(float a, float k, float r, Point3D c,
-                                  Point3D* points, Vector* normals, int number);
-  static void GetKnitStitchTrace2(float a, float k, float r, Point3D c,
-                                  Point3D* points, Vector* normals, int number);
-
-  static void ReadSurface(const wxChar *filename);
-  static void GetStraightTube();
 };
 
 #endif // _CALCULATOR_HPP_

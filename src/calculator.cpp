@@ -4,10 +4,6 @@
 
 static float pi = 3.1415;
 
-void Calculator::GetSurfacePoints() {
-  Calculator::DrawCurvedTube(0.15, 1.2, 0.4, Point3D(), verts, norms);
-}
-
 Vector Calculator::CrossProduct(Vector a, Vector b) {
   Vector c;
   c.x = a.y * b.z - a.z * b.y;
@@ -43,15 +39,6 @@ void Calculator::GetPointsAroundCentreWithNormalVector(Point3D c,
     rnorms[i] = Vector(rverts[i].x - c.x,
                        rverts[i].y - c.y,
                        rverts[i].z - c.z);
-  }
-}
-
-void Calculator::GetSinTrace(Point3D* points, Vector* normals, int number) {
-  float step = 3.1415 / number;
-  for (int i = 0; i <= number; i++) {
-    double x = i * step / 3.1415;
-    points[i] = Point3D(x - 0.5, sin(x * 3.1415) - 0.5, 0);
-    normals[i] = Vector(1, cos(x * 3.1415), 0);
   }
 }
 
@@ -124,131 +111,14 @@ void Calculator::GetKnitStitchTrace(float a, float k, float r, Point3D c,
     points[i] = Point3D(c.x + fx(t, k, r), c.y + fy(t, k, r), c.z + fz(t, k, r, -a));
     normals[i] =  Vector(px(t, k, r), py(t, k, r), pz(t, k, r, -a));
   }
-  for (int i = 0; i <= part * 8; i++) {
-    printf("Point %d %f %f %f\t", i, points[i].x, points[i].y, points[i].z);
-    printf("Normal %d %f %f %f\n", i, normals[i].x, normals[i].y, normals[i].z);
-  }
+//  for (int i = 0; i <= part * 8; i++) {
+//    printf("Point %d %f %f %f\t", i, points[i].x, points[i].y, points[i].z);
+//    printf("Normal %d %f %f %f\n", i, normals[i].x, normals[i].y, normals[i].z);
+//  }
 }
 
-void Calculator::GetKnitStitchTrace1(float a, float k, float r, Point3D c,
-                                    Point3D* points, 
-                                    Vector* normals, int number) {
-  int part = (number - 1) / 8;
-  float step = pi / 4 / part;
-  float curve_top = -a;
-  float curve_down = -a;
-  for (int i = 0; i <= part; i++) {
-    double t = i * step + pi;
-    points[i] = Point3D(c.x + k * (r * sin(2 * t)) + (-2 * r), 
-                        c.y + 2 * r * cos(t), 
-                        c.z + curve_down * cos(4 * t) + curve_down);
-    normals[i] = Calculator::Normalize(Vector(k * (r * cos(2 * t)), 
-                                              2 * r * (-sin(t)), 
-                                              curve_down * (-4 * sin(4 * t))));
-  }
-  for (int i = part; i <= 3 * part; i++) {
-    double t = i * step + pi;
-    points[i] = Point3D(c.x + (k - 1) * (r * sin(2 * t)) + (-r), 
-                        c.y + 2 * r * cos(t), 
-                        c.z);
-    normals[i] = Calculator::Normalize(Vector((k - 1) * (r * cos(2 * t)), 
-                                              2 * r * (-sin(t)), 
-                                              0));
-  }
-  for (int i = 3 * part; i <= 5 * part; i++) {
-    double t = i * step + pi;
-    points[i] = Point3D(c.x + k * (r * sin(2 * t)), 
-                        c.y + 2 * r * cos(t), 
-                        c.z + curve_top * cos(4 * t) + curve_top);
-    normals[i] = Calculator::Normalize(Vector(k * (r * cos(2 * t)), 
-                                              2 * r * (-sin(t)), 
-                                              curve_top * (-4 * sin(4 * t))));
-  }
-  for (int i = 5 * part; i <= 7 * part; i++) {
-    double t = i * step + pi;
-    points[i] = Point3D(c.x + (k - 1) * (r * sin(2 * t)) + (r), 
-                        c.y + 2 * r * cos(t), 
-                        c.z);
-    normals[i] = Calculator::Normalize(Vector(k * (r * cos(2 * t)), 
-                                              2 * r * (-sin(t)), 
-                                              0));
-  }
-  for (int i = 7 * part; i <= 8 * part; i++) {
-    double t = i * step + pi;
-    points[i] = Point3D(c.x + k * (r * sin(2 * t)) + (2 * r), 
-                        c.y + 2 * r * cos(t), 
-                        c.z + curve_down * cos(4 * t) + curve_down);
-    normals[i] = Calculator::Normalize(Vector(k * (r * cos(2 * t)), 
-                                              2 * r * (-sin(t)), 
-                                              curve_down * (-4 * sin(4 * t))));
-  }
-  for (int i = 0; i <= part * 8; i++) {
-    printf("Point %d %f %f %f\t", i, points[i].x, points[i].y, points[i].z);
-    printf("Normal %d %f %f %f\n", i, normals[i].x, normals[i].y, normals[i].z);
-  }
-}
-
-void Calculator::GetKnitStitchTrace2(float a, float k, float r, Point3D c,
-                         Point3D* points, 
-                         Vector* normals, int number) {
-  int part = (number - 1) / 8;
-  float pi = 3.1415;
-  float step = pi / 2 / part;
-  float curve_top = -a;
-  float curve_down = -a;
-  for (int i = 0; i <= part; i++) {
-    double t = i * step;
-    points[i] = Point3D(c.x + k * r * cos(t - pi/2) - 2 * r, 
-                        c.y + r * sin(t - pi/2) - r, 
-                        c.z + (cos(2 * t) + 1) * curve_down);
-    normals[i] = Calculator::Normalize(Vector(-k * r * sin(t - pi/2), 
-                                              r * cos(t - pi/2), 
-                                              2 * (-sin(2 * t)) * curve_down));
-  }
-  for (int i = part + 1; i <= part * 3; i++) {
-    double t = (i - part) * step;
-    points[i] = Point3D(c.x + (2 * r * (1 - k) / pi) * t + r * (-2 + k), 
-                        c.y + 2 * r / pi * t - r, 
-                        c.z);
-    normals[i] = Vector((2 * r * (1 - k) / pi), 
-                        2 * r / pi, 
-                        0);
-  }
-  for (int i = part * 3; i <= part * 5; i++) {
-    double t = (i - part * 3) * step;
-    points[i] = Point3D(c.x + (-k) * r * cos(t), 
-                        c.y + r * sin(t) + r, 
-                        c.z + (-cos(2 * t) + 1) * curve_top);
-    normals[i] = Calculator::Normalize(Vector(k * r * sin(t), 
-                                              r * cos(t), 
-                                              2 * sin(2 * t) * curve_top));
-  }
-  for (int i = part * 5 + 1; i <= part * 7; i++) {
-    double t = (i - part * 5) * step;
-    points[i] = Point3D(c.x + (2 * r * (1 - k) / pi) * t + r * k, 
-                        c.y + (-2) * r / pi * t + r, 
-                        c.z);
-    normals[i] = Vector((2 * r * (1 - k) / pi), 
-                        -2 * r / pi, 
-                        0);
-  }
-  for (int i = part * 7; i <= part * 8; i++) {
-    double t = (i - part * 7) * step;
-    points[i] = Point3D(c.x + (-k) * r * cos(t) + 2 * r, 
-                        c.y + (-r) * sin(t) - r, 
-                        c.z + (- cos(2 * t) + 1) * curve_down);
-    normals[i] = Calculator::Normalize(Vector(k * r * sin(t), 
-                                              -r * cos(t), 
-                                              2 * sin(2 * t) * curve_down));
-  }
-  for (int i = 0; i <= part * 8; i++) {
-    printf("Point %d %f %f %f\t", i, points[i].x, points[i].y, points[i].z);
-    printf("Normal %d %f %f %f\n", i, normals[i].x, normals[i].y, normals[i].z);
-  }
-}
-
-void Calculator::DrawCurvedTube(float a, float k, float r, Point3D c, 
-                                GLfloat verts[][3], GLfloat norms[][3]) {
+void Calculator::DrawCurvedTube(float a, float k, float r, Point3D c,
+                                GLfloat verts[][3], GLfloat norms[][3], GLint& numverts) {
   int stepsCircle = 8;
   int stepsTube = 10 * 8 + 1;
   float step = 2 * 3.1415 / stepsCircle;
@@ -295,51 +165,4 @@ void Calculator::DrawCurvedTube(float a, float k, float r, Point3D c,
   delete[] points;
   delete[] normals;
   numverts = (stepsCircle + 1) * (stepsTube) * 2;
-  // for (int i = numverts - 10; i < numverts; i++) {
-  //   printf("%f %f %f\n", verts[i][0], verts[i][1], verts[i][2]); 
-  // }
-
-  // wxPrintf(_T("%d vertices, %d triangles\n"), numverts, numverts-2);
-}
-
-void Calculator::ReadSurface(const wxChar *filename) {
-  FILE *f = wxFopen(filename,_T("r"));
-  if (!f) {
-    wxString msg = _T("Couldn't read ");
-    msg += filename;
-    wxMessageBox(msg);
-    return;
-  }
-  numverts = 0;
-  while (!feof(f) && numverts<MAXVERTS) {
-    fscanf(f, "%f %f %f  %f %f %f",
-           &verts[numverts][0], &verts[numverts][1], &verts[numverts][2],
-           &norms[numverts][0], &norms[numverts][1], &norms[numverts][2]);
-    numverts++;
-  }
-  numverts--;
-  wxPrintf(_T("%d vertices, %d triangles\n"), numverts, numverts-2);
-  fclose(f);
-}
-
-void Calculator::GetStraightTube() {
-  int stepsCircle = 100;
-  int stepsTube = 10;
-  float a = 0.2;
-  float l = 1.5;
-  float step = 2 * 3.1415 / stepsCircle;
-  for (int j = 0; j < stepsTube; j++) {
-    for (int i = 0; i <= stepsCircle; i++) {
-      int n = 2 * j * (stepsCircle + 1) + i * 2;
-      verts[n][1] = verts[n + 1][1] = a * cos(step * i);
-      verts[n][2] = verts[n + 1][2] = a * sin(step * i);
-      verts[n][0] = -l / 2 + l * j / stepsTube;
-      verts[n + 1][0] = -l / 2 + l * (j + 1) / stepsTube;
-      norms[n][1] = norms[n + 1][1] = a * cos(step * i);
-      norms[n][2] = norms[n + 1][2] = a * sin(step * i);
-      norms[n][0] = norms[n + 1][0] = 0;
-    }
-  }
-  numverts = (stepsCircle + 1) * 2 * stepsTube; 
-  wxPrintf(_T("%d vertices, %d triangles\n"), numverts, numverts-2);
 }

@@ -4,11 +4,6 @@
 #include "header.hpp"
 #include "model.hpp"
 
-extern GLboolean speed_test;
-extern GLboolean use_vertex_arrays;
-
-extern GLboolean doubleBuffer;
-
 extern GLboolean smooth;
 extern GLboolean lighting;
 
@@ -17,10 +12,6 @@ extern GLboolean lighting;
 #endif
 
 extern Model model;
-
-extern GLfloat verts[MAXVERTS][3];
-extern GLfloat norms[MAXVERTS][3];
-extern GLint numverts;
 
 extern GLfloat xrot;
 extern GLfloat yrot;

@@ -8,10 +8,6 @@
 #include "../img/icons/sample.xpm"
 #endif
 
-GLfloat verts[MAXVERTS][3];
-GLfloat norms[MAXVERTS][3];
-GLint numverts;
-
 GLfloat xrot;
 GLfloat yrot;
 
@@ -21,26 +17,18 @@ static float yc;
 Model model(0, 0, 0);
 
 static void DrawSurface() {
-  GLint i;
+    GLint i;
   
-#ifdef GL_EXT_vertex_array
-  if (use_vertex_arrays) {
-    glDrawArraysEXT(GL_TRIANGLE_STRIP, 0, numverts);
-  } else
-#endif
-  {
     for (int k = 0; k < model._rows; k++) {
       for (int l = 0; l < model._stitches; l++) {
         glBegin(GL_TRIANGLE_STRIP);
-        for (i = 0; i < numverts; i++) {
-          glColor3f(0, 0, 1);
+        for (i = 0; i < model._numverts[k][l]; i++) {
           glNormal3fv(model._norms[k][l][i]);
           glVertex3fv(model._verts[k][l][i]);
         }
         glEnd();
       }
     }
-  }
 }
 
 static void DrawScene() {
@@ -61,7 +49,6 @@ MyFrame *frame = NULL;
 IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit() {
-  Args(argc, argv);
   frame = new MyFrame(NULL, wxT("KNITTER"),
                       wxDefaultPosition, 
                       wxSize(700, 700));
@@ -85,43 +72,32 @@ bool MyApp::OnInit() {
 #  endif
 #endif
 
-  if(!doubleBuffer) {
-    printf("don't have double buffer, disabling\n");
-#ifdef __WXGTK__
-    gl_attrib[9] = None;
-#endif
-    doubleBuffer = GL_FALSE;
-  }
-
   frame->m_canvas = new TestGLCanvas(frame, wxID_ANY, wxDefaultPosition,
                                      wxDefaultSize, 0, _T("TestGLCanvas"), 
                                      gl_attrib );
-
   frame->Show(true);
-
   frame->m_canvas->SetCurrent();
     
-//Calculator::GetSurfacePoints();
-float a = 0.15;
-float k = 1.4;
-float r = 0.25;
-model = Model(a, k, r);
-model._rows = 5;
-model._stitches = 5;
-for (int k = 0; k < model._rows; k++) {
-  for (int l = 0; l < model._stitches; l++) {
-    model._centres[k][l] = Point3D(0.5 + l * 4 * r, 1 + k * (3 * r - a / 2), 0);
-  }
-}
-for (int k = 0; k < model._rows; k++) {
-  for (int l = 0; l < model._stitches; l++) {
-   Calculator::DrawCurvedTube(model._a, model._k, model._r, model._centres[k][l],
-                               model._verts[k][l], model._norms[k][l]);
-  }
-}
-xc = model._stitches * 2 * r;
-yc = model._rows * 2 * r;
-Init(-0.5, xc * 2 + 0.5, -0.5, yc * 2 + 0.5);
+    float a = 0.15;
+    float k = 1.4;
+    float r = 0.25;
+    model = Model(a, k, r);
+    model._rows = 5;
+    model._stitches = 5;
+    for (int k = 0; k < model._rows; k++) {
+      for (int l = 0; l < model._stitches; l++) {
+        model._centres[k][l] = Point3D(0.5 + l * 4 * r, 1 + k * (3 * r - a / 2), 0);
+      }
+    }
+    for (int k = 0; k < model._rows; k++) {
+      for (int l = 0; l < model._stitches; l++) {
+       Calculator::DrawCurvedTube(model._a, model._k, model._r, model._centres[k][l],
+                                   model._verts[k][l], model._norms[k][l], model._numverts[k][l]);
+      }
+    }
+    xc = model._stitches * 2 * r;
+    yc = model._rows * 2 * r;
+    Init(-0.5, xc * 2 + 0.5, -0.5, yc * 2 + 0.5);
 
   return true;
 }
@@ -166,11 +142,11 @@ TestGLCanvas::TestGLCanvas(wxWindow *parent, wxWindowID id,
   parent->Show(true);
   SetCurrent();
   
-  /* Make sure server supports the vertex array extension */
-  char* extensions = (char *)glGetString(GL_EXTENSIONS);
-  if (!extensions || !strstr(extensions, "GL_EXT_vertex_array")) {
-    use_vertex_arrays = GL_FALSE;
-  }
+//  /* Make sure server supports the vertex array extension */
+//  char* extensions = (char *)glGetString(GL_EXTENSIONS);
+//  if (!extensions || !strstr(extensions, "GL_EXT_vertex_array")) {
+//    use_vertex_arrays = GL_FALSE;
+//  }
 }
 
 void TestGLCanvas::OnPaint(wxPaintEvent& WXUNUSED(event)) {
