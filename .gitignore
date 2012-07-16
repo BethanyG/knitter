@@ -4,3 +4,6 @@ CMakeFiles/
 Makefile
 CMakeCache.txt
 cmake_install.cmake
+*.iml
+.idea/
+*.iws
