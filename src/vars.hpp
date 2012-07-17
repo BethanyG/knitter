@@ -11,7 +11,7 @@ extern GLboolean lighting;
 #define MAXVERTS 10000
 #endif
 
-extern Model model;
+//extern Model model;
 
 extern GLfloat xrot;
 extern GLfloat yrot;

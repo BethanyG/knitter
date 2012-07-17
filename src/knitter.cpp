@@ -15,19 +15,21 @@ GLfloat yrot;
 static float xc;
 static float yc;
 
-Model model(0, 0, 0, Pattern("", 0, 0));
+//Model model(0, 0, 0, Pattern("", 0, 0));
+Model* model = NULL;
 
 static void DrawSurface() {
     GLint i;
-  
-    for (int k = 0; k < model._rows; k++) {
-      for (int l = 0; l < model._columns; l++) {
-        glBegin(GL_TRIANGLE_STRIP);
-        for (i = 0; i < model._numverts[k][l]; i++) {
-          glNormal3fv(model._norms[k][l][i]);
-          glVertex3fv(model._verts[k][l][i]);
+    if (model) {
+      for (int k = 0; k < (model->_rows); k++) {
+        for (int l = 0; l < (model->_columns); l++) {
+          glBegin(GL_TRIANGLE_STRIP);
+          for (i = 0; i < model->_numverts[k][l]; i++) {
+            glNormal3fv(model->_norms[k][l][i]);
+            glVertex3fv(model->_verts[k][l][i]);
+          }
+          glEnd();
         }
-        glEnd();
       }
     }
 }
@@ -79,15 +81,16 @@ bool MyApp::OnInit() {
   frame->Show(true);
   frame->m_canvas->SetCurrent();
     
-  Pattern pattern("+++++++++", 3, 3);
+  Pattern pattern("+++++++++++++++++++++++++", 5, 5);
 
   float a = 0.15;
   float k = 1.4;
   float r = 0.25;
-  model = Model(a, k, r, pattern);
-  xc = pattern.get_rows();
-  yc = pattern.get_columns();
-  Init(-0.5, xc * 2 + 0.5, -0.5, yc * 2 + 0.5);
+  fprintf(stderr, "%d %d\n", pattern.get_rows(), pattern.get_columns());
+  model = new Model(a, k, r, pattern);
+  xc = pattern.get_columns() / 2;
+  yc = pattern.get_rows() / 2;
+  Init(-0.5, yc * 2 * 4 * r + 0.5, -0.5, xc * 2 * 4 * r + 0.5);
 
   return true;
 }

@@ -24,13 +24,13 @@ class Model {
 
  public:
   Model(float a, float k, float r, Pattern pattern) : _a(a), _k(k), _r(r) {
+    fprintf(stderr, "%d %d", _rows, _columns);
     _rows = pattern.get_rows();
     _columns = pattern.get_columns();
-    fprintf(stderr, "%d %d", _rows, _columns);
     for (int k = 0; k < _rows; k++) {
       for (int l = 0; l < _columns; l++) {
         _centres[k][l] = Point3D(0.5 + l * 4 * _r,
-                                 1 + _k * (3 * _r - _a / 2), 0);
+                                 1 + k * (3 * _r - _a / 2), 0);
       }
     }
     for (int k = 0; k < _rows; k++) {
