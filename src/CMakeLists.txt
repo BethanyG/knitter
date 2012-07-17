@@ -1,8 +1,10 @@
-add_executable(knitter 
+add_definitions(-g -O0)
+
+add_executable(knitter
 knitter.cpp
-settings.cpp
 calculator.cpp
-pattern.cpp)
+pattern.cpp
+test_gl_canvas.cpp)
 
 find_package(wxWidgets COMPONENTS base core gl REQUIRED)
 

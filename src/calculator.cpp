@@ -1,6 +1,5 @@
 #include <cmath>
 #include "calculator.hpp"
-#include "vars.hpp"
 
 static float pi = 3.1415;
 

@@ -1,33 +1,16 @@
 #ifndef _KNITTER_HPP_
 #define _KNITTER_HPP_
 
+#include "header.hpp"
+#include "knitter.hpp"
+#include "calculator.hpp"
+#include "pattern.hpp"
+#include "test_gl_canvas.hpp"
+
 class MyApp: public wxApp {
  public:
   bool OnInit();
 };
-
-#if wxUSE_GLCANVAS
-
-class TestGLCanvas: public wxGLCanvas {
- public:
-  TestGLCanvas(wxWindow *parent, wxWindowID id = wxID_ANY,
-               const wxPoint& pos = wxDefaultPosition,
-               const wxSize& size = wxDefaultSize, long style = 0,
-               const wxString& name = _T("TestGLCanvas"), int *gl_attrib = NULL);
-  
-  ~TestGLCanvas(){};
-  
-  void OnPaint(wxPaintEvent& event);
-  void OnSize(wxSizeEvent& event);
-  void OnEraseBackground(wxEraseEvent& event);
-  void OnChar(wxKeyEvent& event);
-  void OnMouseEvent(wxMouseEvent& event);
-  
-  DECLARE_EVENT_TABLE()
-};
-
-#endif // # wxUSE_GLCANVAS
-
 
 class MyFrame: public wxFrame {
  public:
@@ -36,10 +19,8 @@ class MyFrame: public wxFrame {
 
   virtual ~MyFrame();
   
-#if wxUSE_GLCANVAS
   TestGLCanvas *m_canvas;
-#endif
-  
+
  private :
   
   void OnExit(wxCommandEvent& event);

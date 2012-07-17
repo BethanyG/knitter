@@ -15,6 +15,8 @@ class Model {
   float _a;
   float _k;
   float _r;
+  float _xc;
+  float _yc;
   int _rows;
   int _columns;
   GLfloat _verts[MAXROWS][MAXCOLUMNS][10000][3];
@@ -24,13 +26,12 @@ class Model {
 
  public:
   Model(float a, float k, float r, Pattern pattern) : _a(a), _k(k), _r(r) {
-    fprintf(stderr, "%d %d", _rows, _columns);
     _rows = pattern.get_rows();
     _columns = pattern.get_columns();
     for (int k = 0; k < _rows; k++) {
       for (int l = 0; l < _columns; l++) {
-        _centres[k][l] = Point3D(0.5 + l * 4 * _r,
-                                 1 + k * (3 * _r - _a / 2), 0);
+        _centres[k][l] = Point3D(2 * r + l * 4 * _r,
+                                 2 * r + k * (3 * _r - _a / 2), 0);
       }
     }
     for (int k = 0; k < _rows; k++) {
@@ -40,7 +41,15 @@ class Model {
                                    _numverts[k][l]);
       }
     }
+    _xc = pattern.get_columns() / 2.0;
+    _yc = pattern.get_rows() / 2.0;
   }
+
+  float get_r() {return _r;}
+  float get_xc() {return _xc;}
+  float get_yc() {return _yc;}
+  int get_rows() {return _rows;}
+  int get_columns() {return _columns;}
 };
 
 #endif // _MODEL_HPP_
