@@ -21,15 +21,15 @@ Vector Calculator::Normalize(Vector n) {
 }
 
 void Calculator::GetPointsAroundCentreWithNormalVector(Point3D c,
-                                                       double r, 
+                                                       double r,
                                                        Vector n,
                                                        Point3D* rverts,
-                                                       Vector* rnorms, 
+                                                       Vector* rnorms,
                                                        int number) {
   Vector u = Calculator::Normalize(Calculator::CrossProduct(n, Vector(1, 1, 2)));
   Vector v = Calculator::Normalize(Calculator::CrossProduct(n, u));
   double delta = 2 * 3.1415 / number;
-  double t = 0;  
+  double t = 0;
   for (int i = 0; i <= number; i++) {
     t = delta * i;
     rverts[i] = Point3D(c.x + r * cos(t) * u.x + r * sin(t) * v.x,
@@ -68,47 +68,63 @@ float py(float t, float k, float r) {
   return 2 * r * sin(t);
 }
 
-float fz(float t, float k, float r, float s) {
+float fz(float t, float k, float r, float s, Stitch st) {
 //  if ((t >= 0) && (t <= pi / 8)) return s * sin(4 * t);
 
-  if ((t >= 0) && (t <= pi / 8)) return s;
-  if ((t >= pi / 8) && (t <= 3 * pi / 8)) return s / 2 * cos(4 * t - pi / 2) + s / 2;
-
-  if ((t >= 5 * pi / 8) && (t <= 7 * pi / 8)) return s / 2 * cos(4 * t + pi / 2) + s / 2;
-  if ((t >= 7 * pi / 8) && (t <= pi)) return s;
-
-  if ((t >= pi) && (t <= 9 * pi / 8)) return s;
-  if ((t >= 9 * pi / 8) && (t <= 11 * pi / 8)) return s / 2 * cos(4 * t - pi / 2) + s / 2;
-
-  if ((t >= 13 * pi / 8) && (t <= 15 * pi / 8)) return s / 2 * cos(4 * t + pi / 2) + s / 2;
-  if ((t >= 15 * pi / 8) && (t <= 2 * pi)) return s;
-
+  if (st.get_bottom() != NONE_STITCH_TYPE) {
+    // left
+    if ((t >= 0) && (t <= pi / 8)) return s;
+    // left curve
+    if ((t >= pi / 8) && (t <= 3 * pi / 8)) return s / 2 * cos(4 * t - pi / 2) + s / 2;
+  } // else : return 0
+  // left middle : return 0
+  if (st.get_self() != NONE_STITCH_TYPE) {
+    // top curve
+    if ((t >= 5 * pi / 8) && (t <= 7 * pi / 8)) return s / 2 * cos(4 * t + pi / 2) + s / 2;
+    // top
+    if ((t >= 7 * pi / 8) && (t <= pi)) return s;
+    if ((t >= pi) && (t <= 9 * pi / 8)) return s;
+    // top curve
+    if ((t >= 9 * pi / 8) && (t <= 11 * pi / 8)) return s / 2 * cos(4 * t - pi / 2) + s / 2;
+  } // else : return 0
+  // right middle : return 0
+  if (st.get_bottom() != NONE_STITCH_TYPE) {
+    // right curve
+    if ((t >= 13 * pi / 8) && (t <= 15 * pi / 8)) return s / 2 * cos(4 * t + pi / 2) + s / 2;
+    // right
+    if ((t >= 15 * pi / 8) && (t <= 2 * pi)) return s;
+  }
   return 0;
 }
 
-float pz(float t, float k, float r, float s){
+float pz(float t, float k, float r, float s, Stitch st){
 //  if ((t >= 0) && (t <= pi / 8)) return s * 4 * cos(4 * t);
 
-  if ((t >= pi / 8) && (t <= 3 * pi / 8)) return s / 2 * (-sin(4 * t - pi / 2) * 4);
-
-  if ((t >= 5 * pi / 8) && (t <= 7 * pi / 8)) return s / 2 * (-sin(4 * t + pi / 2) * 4);
-
-  if ((t >= 9 * pi / 8) && (t <= 11 * pi / 8)) return s / 2 * (-sin(4 * t - pi / 2) * 4);
-
-  if ((t >= 13 * pi / 8) && (t <= 15 * pi / 8)) return s / 2 * (-sin(4 * t + pi / 2) * 4);
-
+  if (st.get_bottom() != NONE_STITCH_TYPE) {
+    if ((t >= pi / 8) && (t <= 3 * pi / 8)) return s / 2 * (-sin(4 * t - pi / 2) * 4);
+  }
+  if (st.get_self() != NONE_STITCH_TYPE) {
+    if ((t >= 5 * pi / 8) && (t <= 7 * pi / 8)) return s / 2 * (-sin(4 * t + pi / 2) * 4);
+    if ((t >= 9 * pi / 8) && (t <= 11 * pi / 8)) return s / 2 * (-sin(4 * t - pi / 2) * 4);
+  }
+  if (st.get_bottom() != NONE_STITCH_TYPE) {
+    if ((t >= 13 * pi / 8) && (t <= 15 * pi / 8)) return s / 2 * (-sin(4 * t + pi / 2) * 4);
+  }
   return 0;
 }
 
-void Calculator::GetKnitStitchTrace(float a, float k, float r, Point3D c,
+void Calculator::GetKnitStitchTrace(float a, float k, float r,
+                                    Stitch st,
+                                    Point3D c,
                                     Point3D* points,
                                     Vector* normals, int number) {
+  printf("%d %d %d %d\n", st.get_self(), st.get_bottom(), st.get_right(), st.get_right());
   int part = (number - 1) / 8;
   float step = pi / 4 / part;
   for (int i = 0; i <= 8 * part; i++){
     float t = i * step;
-    points[i] = Point3D(c.x + fx(t, k, r), c.y + fy(t, k, r), c.z + fz(t, k, r, -a));
-    normals[i] =  Vector(px(t, k, r), py(t, k, r), pz(t, k, r, -a));
+    points[i] = Point3D(c.x + fx(t, k, r), c.y + fy(t, k, r), c.z + fz(t, k, r, -a, st));
+    normals[i] =  Vector(px(t, k, r), py(t, k, r), pz(t, k, r, -a, st));
   }
 //  for (int i = 0; i <= part * 8; i++) {
 //    printf("Point %d %f %f %f\t", i, points[i].x, points[i].y, points[i].z);
@@ -116,26 +132,26 @@ void Calculator::GetKnitStitchTrace(float a, float k, float r, Point3D c,
 //  }
 }
 
-void Calculator::DrawCurvedTube(float a, float k, float r, Point3D c,
+void Calculator::DrawCurvedTube(float a, float k, float r, Stitch st, Point3D c,
                                 GLfloat verts[][3], GLfloat norms[][3], GLint& numverts) {
   int stepsCircle = 8;
   int stepsTube = 10 * 8 + 1;
   float step = 2 * 3.1415 / stepsCircle;
-  
+
   Point3D* points = new Point3D[stepsTube + 1];
   Vector* normals = new Vector[stepsTube + 1];
-  Calculator::GetKnitStitchTrace(a, k, r, c, points, normals, stepsTube);
-  
+  Calculator::GetKnitStitchTrace(a, k, r, st, c, points, normals, stepsTube);
+
   Point3D* rverts0 = new Point3D[stepsCircle + 1];
-  Vector* rnorms0 = new Vector[stepsCircle + 1];  
+  Vector* rnorms0 = new Vector[stepsCircle + 1];
   Calculator::GetPointsAroundCentreWithNormalVector(points[0], a, normals[0],
-                                                    rverts0, rnorms0, 
+                                                    rverts0, rnorms0,
                                                     stepsCircle);
   Point3D* rverts1;
-  Vector* rnorms1;  
+  Vector* rnorms1;
   for (int j = 1; j <= stepsTube; j++) {
     rverts1 = new Point3D[stepsCircle + 1];
-    rnorms1 = new Vector[stepsCircle + 1];  
+    rnorms1 = new Vector[stepsCircle + 1];
     Calculator::GetPointsAroundCentreWithNormalVector(
         points[j], a, normals[j], rverts1, rnorms1, stepsCircle);
     for (int i = 0; i <= stepsCircle; i++) {
@@ -146,9 +162,9 @@ void Calculator::DrawCurvedTube(float a, float k, float r, Point3D c,
       verts[n + 1][0] = rverts1[i].x;
       verts[n + 1][1] = rverts1[i].y;
       verts[n + 1][2] = rverts1[i].z;
-      norms[n][0] = rnorms0[i].x; 
-      norms[n][1] = rnorms0[i].y; 
-      norms[n][2] = rnorms0[i].z; 
+      norms[n][0] = rnorms0[i].x;
+      norms[n][1] = rnorms0[i].y;
+      norms[n][2] = rnorms0[i].z;
       norms[n + 1][0] = rnorms1[i].x;
       norms[n + 1][1] = rnorms1[i].y;
       norms[n + 1][2] = rnorms1[i].z;

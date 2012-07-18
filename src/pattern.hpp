@@ -12,6 +12,7 @@ class Pattern {
     Pattern(const char* pattern, int rows, int columns);
     int get_rows() {return _rows;}
     int get_columns() {return _columns;}
+    Stitch get_stitch_at(int row, int column) {return _stitches[row][column];}
 
   private:
     Stitch _stitches[MAXROWS][MAXCOLUMNS];

@@ -36,7 +36,8 @@ class Model {
     }
     for (int k = 0; k < _rows; k++) {
       for (int l = 0; l < _columns; l++) {
-        Calculator::DrawCurvedTube(_a, _k, _r, _centres[k][l],
+        Calculator::DrawCurvedTube(_a, _k, _r, pattern.get_stitch_at(k, l),
+                                   _centres[k][l],
                                    _verts[k][l], _norms[k][l],
                                    _numverts[k][l]);
       }
