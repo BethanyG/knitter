@@ -8,8 +8,8 @@
 
 class Model {
  private:
-  const static int MAXCOLUMNS = 10;
   const static int MAXROWS = 10;
+  const static int MAXCOLUMNS = 10;
 
  public:
   float _a;
@@ -31,7 +31,7 @@ class Model {
     for (int k = 0; k < _rows; k++) {
       for (int l = 0; l < _columns; l++) {
         _centres[k][l] = Point3D(2 * r + l * 4 * _r,
-                                 2 * r + k * (3 * _r - _a / 2), 0);
+                                 2 * r + k * (3 * _r - _a), 0);
       }
     }
     for (int k = 0; k < _rows; k++) {
@@ -43,7 +43,7 @@ class Model {
       }
     }
     _xc = pattern.get_columns() / 2.0;
-    _yc = pattern.get_rows() / 2.0;
+    _yc = pattern.get_rows() / 2.0 * 0.75 - _r;
   }
 
   float get_r() {return _r;}

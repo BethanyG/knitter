@@ -11,8 +11,8 @@ IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit() {
   frame = new MyFrame(NULL, wxT("KNITTER"),
-                      wxDefaultPosition, 
-                      wxSize(600, 600));
+                      wxDefaultPosition,
+                      wxSize(800, 600));
   frame->SetIcon(wxICON(sample));
   wxMenu *fileMenu = new wxMenu;
   fileMenu->Append(wxID_EXIT, _T("E&xit"));
@@ -33,7 +33,10 @@ bool MyApp::OnInit() {
 #  endif
 #endif
 
-  Pattern pattern("+++++++++++++++++++++++++", 5, 5);
+//  Pattern pattern("+++++++++++++++++++++++++", 5, 5);
+//  Pattern pattern("-----+++++-----+++++-----", 5, 5);
+  Pattern pattern("--------++++++++--------++++++++--------++++++++--------++++++++", 8, 8);
+
   Model* model = new Model(0.17, 1.4, 0.25, pattern);
 
   frame->m_canvas = new TestGLCanvas(frame, wxID_ANY, wxDefaultPosition,

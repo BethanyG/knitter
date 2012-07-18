@@ -68,48 +68,46 @@ float py(float t, float k, float r) {
   return 2 * r * sin(t);
 }
 
-float fz(float t, float k, float r, float s, Stitch st) {
+float fz(float t, float k, float r, float bottom, float top, bool left_change, bool right_change) {
 //  if ((t >= 0) && (t <= pi / 8)) return s * sin(4 * t);
-
-  if (st.get_bottom() != NONE_STITCH_TYPE) {
-    // left
-    if ((t >= 0) && (t <= pi / 8)) return s;
-    // left curve
-    if ((t >= pi / 8) && (t <= 3 * pi / 8)) return s / 2 * cos(4 * t - pi / 2) + s / 2;
-  } // else : return 0
+  // left
+  if ((t >= 0) && (t <= pi / 8))
+    if (left_change)
+      return bottom;
+    else
+      return bottom;
+  // left curve
+  if ((t >= pi / 8) && (t <= 3 * pi / 8)) return bottom / 2 * cos(4 * t - pi / 2) + bottom / 2;
   // left middle : return 0
-  if (st.get_self() != NONE_STITCH_TYPE) {
-    // top curve
-    if ((t >= 5 * pi / 8) && (t <= 7 * pi / 8)) return s / 2 * cos(4 * t + pi / 2) + s / 2;
-    // top
-    if ((t >= 7 * pi / 8) && (t <= pi)) return s;
-    if ((t >= pi) && (t <= 9 * pi / 8)) return s;
-    // top curve
-    if ((t >= 9 * pi / 8) && (t <= 11 * pi / 8)) return s / 2 * cos(4 * t - pi / 2) + s / 2;
-  } // else : return 0
+  // top curve
+  if ((t >= 5 * pi / 8) && (t <= 7 * pi / 8)) return top / 2 * cos(4 * t + pi / 2) + top / 2;
+  // top
+  if ((t >= 7 * pi / 8) && (t <= 9 * pi / 8)) return top;
+  // top curve
+  if ((t >= 9 * pi / 8) && (t <= 11 * pi / 8)) return top / 2 * cos(4 * t - pi / 2) + top / 2;
   // right middle : return 0
-  if (st.get_bottom() != NONE_STITCH_TYPE) {
-    // right curve
-    if ((t >= 13 * pi / 8) && (t <= 15 * pi / 8)) return s / 2 * cos(4 * t + pi / 2) + s / 2;
-    // right
-    if ((t >= 15 * pi / 8) && (t <= 2 * pi)) return s;
-  }
+  // right curve
+  if ((t >= 13 * pi / 8) && (t <= 15 * pi / 8)) return bottom / 2 * cos(4 * t + pi / 2) + bottom / 2;
+  // right
+  if ((t >= 15 * pi / 8) && (t <= 2 * pi))
+    if (right_change)
+      return bottom;
+    else
+      return bottom;
   return 0;
 }
 
-float pz(float t, float k, float r, float s, Stitch st){
+float pz(float t, float k, float r, float bottom, float top, bool left_change, bool right_change){
 //  if ((t >= 0) && (t <= pi / 8)) return s * 4 * cos(4 * t);
 
-  if (st.get_bottom() != NONE_STITCH_TYPE) {
-    if ((t >= pi / 8) && (t <= 3 * pi / 8)) return s / 2 * (-sin(4 * t - pi / 2) * 4);
-  }
-  if (st.get_self() != NONE_STITCH_TYPE) {
-    if ((t >= 5 * pi / 8) && (t <= 7 * pi / 8)) return s / 2 * (-sin(4 * t + pi / 2) * 4);
-    if ((t >= 9 * pi / 8) && (t <= 11 * pi / 8)) return s / 2 * (-sin(4 * t - pi / 2) * 4);
-  }
-  if (st.get_bottom() != NONE_STITCH_TYPE) {
-    if ((t >= 13 * pi / 8) && (t <= 15 * pi / 8)) return s / 2 * (-sin(4 * t + pi / 2) * 4);
-  }
+  // left curve
+  if ((t >= pi / 8) && (t <= 3 * pi / 8)) return bottom / 2 * (-sin(4 * t - pi / 2) * 4);
+  // top curve
+  if ((t >= 5 * pi / 8) && (t <= 7 * pi / 8)) return top / 2 * (-sin(4 * t + pi / 2) * 4);
+  // top curve
+  if ((t >= 9 * pi / 8) && (t <= 11 * pi / 8)) return top / 2 * (-sin(4 * t - pi / 2) * 4);
+  // right curve
+  if ((t >= 13 * pi / 8) && (t <= 15 * pi / 8)) return bottom / 2 * (-sin(4 * t + pi / 2) * 4);
   return 0;
 }
 
@@ -118,13 +116,26 @@ void Calculator::GetKnitStitchTrace(float a, float k, float r,
                                     Point3D c,
                                     Point3D* points,
                                     Vector* normals, int number) {
-  printf("%d %d %d %d\n", st.get_self(), st.get_bottom(), st.get_right(), st.get_right());
+//  printf("%d %d %d %d\n", st.get_self(), st.get_bottom(), st.get_left(), st.get_right());
+  float bottom = 0;
+  switch (st.get_bottom()) {
+    case BACK_STITCH_TYPE: bottom = a * 1.5; break;
+    case FACE_STITCH_TYPE: bottom = -a * 1.5; break;
+  }
+  float top = 0;
+  switch (st.get_self()) {
+    case BACK_STITCH_TYPE: top = a * 1.5; break;
+    case FACE_STITCH_TYPE: top = -a * 1.5; break;
+  }
+  bool left_change = (st.get_left() == OPPOSITE_STITCH_TYPE);
+  bool right_change = (st.get_right() == OPPOSITE_STITCH_TYPE);
+
   int part = (number - 1) / 8;
   float step = pi / 4 / part;
   for (int i = 0; i <= 8 * part; i++){
     float t = i * step;
-    points[i] = Point3D(c.x + fx(t, k, r), c.y + fy(t, k, r), c.z + fz(t, k, r, -a, st));
-    normals[i] =  Vector(px(t, k, r), py(t, k, r), pz(t, k, r, -a, st));
+    points[i] = Point3D(c.x + fx(t, k, r), c.y + fy(t, k, r), c.z + fz(t, k, r, bottom, top, left_change, right_change));
+    normals[i] =  Vector(px(t, k, r), py(t, k, r), pz(t, k, r, bottom, top, left_change, right_change));
   }
 //  for (int i = 0; i <= part * 8; i++) {
 //    printf("Point %d %f %f %f\t", i, points[i].x, points[i].y, points[i].z);
@@ -134,8 +145,8 @@ void Calculator::GetKnitStitchTrace(float a, float k, float r,
 
 void Calculator::DrawCurvedTube(float a, float k, float r, Stitch st, Point3D c,
                                 GLfloat verts[][3], GLfloat norms[][3], GLint& numverts) {
-  int stepsCircle = 8;
-  int stepsTube = 10 * 8 + 1;
+  int stepsCircle = 25;
+  int stepsTube = 10 * 16 + 1;
   float step = 2 * 3.1415 / stepsCircle;
 
   Point3D* points = new Point3D[stepsTube + 1];
