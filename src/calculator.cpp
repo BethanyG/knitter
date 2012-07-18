@@ -73,7 +73,7 @@ float fz(float t, float k, float r, float bottom, float top, bool left_change, b
   // left
   if ((t >= 0) && (t <= pi / 8))
     if (left_change)
-      return bottom;
+      return bottom * sin(4 * t);
     else
       return bottom;
   // left curve
@@ -91,15 +91,17 @@ float fz(float t, float k, float r, float bottom, float top, bool left_change, b
   // right
   if ((t >= 15 * pi / 8) && (t <= 2 * pi))
     if (right_change)
-      return bottom;
+      return bottom * sin(4 * t + pi);
     else
       return bottom;
   return 0;
 }
 
 float pz(float t, float k, float r, float bottom, float top, bool left_change, bool right_change){
-//  if ((t >= 0) && (t <= pi / 8)) return s * 4 * cos(4 * t);
-
+  // left
+  if ((t >= 0) && (t <= pi / 8))
+    if (left_change)
+      return bottom * 4 * cos(4 * t);
   // left curve
   if ((t >= pi / 8) && (t <= 3 * pi / 8)) return bottom / 2 * (-sin(4 * t - pi / 2) * 4);
   // top curve
@@ -108,6 +110,10 @@ float pz(float t, float k, float r, float bottom, float top, bool left_change, b
   if ((t >= 9 * pi / 8) && (t <= 11 * pi / 8)) return top / 2 * (-sin(4 * t - pi / 2) * 4);
   // right curve
   if ((t >= 13 * pi / 8) && (t <= 15 * pi / 8)) return bottom / 2 * (-sin(4 * t + pi / 2) * 4);
+  // right
+  if ((t >= 15 * pi / 8) && (t <= 2 * pi))
+    if (right_change)
+      return bottom * 4 * cos(4 * t + pi);
   return 0;
 }
 

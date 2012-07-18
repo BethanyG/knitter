@@ -33,11 +33,17 @@ bool MyApp::OnInit() {
 #  endif
 #endif
 
+//  Pattern pattern("+-", 1, 2);
+//  Pattern pattern("+-+-+-+-+-+-+-+-", 4, 4);
+//  Pattern pattern("-+-++-+--+-++-+-", 4, 4);
 //  Pattern pattern("+++++++++++++++++++++++++", 5, 5);
 //  Pattern pattern("-----+++++-----+++++-----", 5, 5);
-  Pattern pattern("--------++++++++--------++++++++--------++++++++--------++++++++", 8, 8);
+//  Pattern pattern("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++", 8, 8);
+//  Pattern pattern("--------++++++++--------++++++++--------++++++++--------++++++++", 8, 8);
+//  Pattern pattern("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-", 8, 8);
+  Pattern pattern("+-+-+-+--+-+-+-++-+-+-+--+-+-+-++-+-+-+--+-+-+-++-+-+-+--+-+-+-+", 8, 8);
 
-  Model* model = new Model(0.17, 1.4, 0.25, pattern);
+  Model* model = new Model(0.15, 1.4, 0.25, pattern);
 
   frame->m_canvas = new TestGLCanvas(frame, wxID_ANY, wxDefaultPosition,
                                      wxDefaultSize, 0, _T("TestGLCanvas"),
