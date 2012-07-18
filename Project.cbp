@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+   <FileVersion major="1" minor="6" />
+   <Project>
+      <Option title="Project" />
+      <Option makefile_is_custom="1" />
+      <Option compiler="gcc" />
+      <Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\usr\;CMake Files\..\..\..\usr\share\;CMake Files\..\..\..\usr\share\cmake-2.8\;CMake Files\..\..\..\usr\share\cmake-2.8\Modules\;CMake Files\..\..\..\usr\share\cmake-2.8\Modules\Platform\;CMake Files\..\..\..\usr\share\cmake-2.8\Modules\Compiler\;CMake Files\src\;" />
+      <Build>
+      <Target title="all">
+         <Option working_dir="/home/mariya/knitter" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/mariya/knitter/Makefile&quot; all" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/mariya/knitter/Makefile&quot; &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/mariya/knitter/Makefile&quot; clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/mariya/knitter/Makefile&quot; clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="rebuild_cache">
+         <Option working_dir="/home/mariya/knitter" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/mariya/knitter/Makefile&quot; rebuild_cache" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/mariya/knitter/Makefile&quot; &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/mariya/knitter/Makefile&quot; clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/mariya/knitter/Makefile&quot; clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="knitter">
+         <Option output="/home/mariya/knitter/bin/knitter" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/mariya/knitter/bin" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add directory="/usr/lib/wx/include/gtk2-unicode-release-2.8" />
+            <Add directory="/usr/include/wx-2.8" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/mariya/knitter/bin/Makefile&quot; knitter" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/mariya/knitter/bin/Makefile&quot; &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/mariya/knitter/bin/Makefile&quot; clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/mariya/knitter/bin/Makefile&quot; clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="knitter/fast">
+         <Option output="/home/mariya/knitter/bin/knitter" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/mariya/knitter/bin" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add directory="/usr/lib/wx/include/gtk2-unicode-release-2.8" />
+            <Add directory="/usr/include/wx-2.8" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/mariya/knitter/bin/Makefile&quot; knitter/fast" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/mariya/knitter/bin/Makefile&quot; &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/mariya/knitter/bin/Makefile&quot; clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/mariya/knitter/bin/Makefile&quot; clean" />
+         </MakeCommands>
+      </Target>
+      </Build>
+      <Unit filename="/home/mariya/knitter/src/calculator.cpp">
+      </Unit>
+      <Unit filename="/home/mariya/knitter/src/knitter.cpp">
+      </Unit>
+      <Unit filename="/home/mariya/knitter/src/pattern.cpp">
+      </Unit>
+      <Unit filename="/home/mariya/knitter/src/test_gl_canvas.cpp">
+      </Unit>
+      <Unit filename="/home/mariya/knitter/src/calculator.hpp">
+      </Unit>
+      <Unit filename="/home/mariya/knitter/src/knitter.hpp">
+      </Unit>
+      <Unit filename="/home/mariya/knitter/src/pattern.hpp">
+      </Unit>
+      <Unit filename="/home/mariya/knitter/src/test_gl_canvas.hpp">
+      </Unit>
+      <Unit filename="/home/mariya/knitter/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\" />
+      </Unit>
+      <Unit filename="/home/mariya/knitter/../../../usr/share/cmake-2.8/Modules/CMakeSystemSpecificInformation.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\usr\share\cmake-2.8\Modules\" />
+      </Unit>
+      <Unit filename="/home/mariya/knitter/../../../usr/share/cmake-2.8/Modules/CMakeGenericSystem.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\usr\share\cmake-2.8\Modules\" />
+      </Unit>
+      <Unit filename="/home/mariya/knitter/../../../usr/share/cmake-2.8/Modules/CMakeCInformation.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\usr\share\cmake-2.8\Modules\" />
+      </Unit>
+      <Unit filename="/home/mariya/knitter/../../../usr/share/cmake-2.8/Modules/CMakeCommonLanguageInclude.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\usr\share\cmake-2.8\Modules\" />
+      </Unit>
+      <Unit filename="/home/mariya/knitter/../../../usr/share/cmake-2.8/Modules/CMakeCXXInformation.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\usr\share\cmake-2.8\Modules\" />
+      </Unit>
+      <Unit filename="/home/mariya/knitter/../../../usr/share/cmake-2.8/Modules/CMakeCommonLanguageInclude.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\usr\share\cmake-2.8\Modules\" />
+      </Unit>
+      <Unit filename="/home/mariya/knitter/../../../usr/share/cmake-2.8/Modules/FindwxWidgets.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\usr\share\cmake-2.8\Modules\" />
+      </Unit>
+      <Unit filename="/home/mariya/knitter/../../../usr/share/cmake-2.8/Modules/FindPackageHandleStandardArgs.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\usr\share\cmake-2.8\Modules\" />
+      </Unit>
+      <Unit filename="/home/mariya/knitter/../../../usr/share/cmake-2.8/Modules/FindPackageMessage.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\usr\share\cmake-2.8\Modules\" />
+      </Unit>
+      <Unit filename="/home/mariya/knitter/../../../usr/share/cmake-2.8/Modules/CMakeParseArguments.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\usr\share\cmake-2.8\Modules\" />
+      </Unit>
+      <Unit filename="/home/mariya/knitter/../../../usr/share/cmake-2.8/Modules/UsewxWidgets.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\usr\share\cmake-2.8\Modules\" />
+      </Unit>
+      <Unit filename="/home/mariya/knitter/../../../usr/share/cmake-2.8/Modules/Platform/Linux.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\usr\share\cmake-2.8\Modules\Platform\" />
+      </Unit>
+      <Unit filename="/home/mariya/knitter/../../../usr/share/cmake-2.8/Modules/Platform/UnixPaths.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\usr\share\cmake-2.8\Modules\Platform\" />
+      </Unit>
+      <Unit filename="/home/mariya/knitter/../../../usr/share/cmake-2.8/Modules/Platform/Linux-GNU-C.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\usr\share\cmake-2.8\Modules\Platform\" />
+      </Unit>
+      <Unit filename="/home/mariya/knitter/../../../usr/share/cmake-2.8/Modules/Platform/Linux-GNU.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\usr\share\cmake-2.8\Modules\Platform\" />
+      </Unit>
+      <Unit filename="/home/mariya/knitter/../../../usr/share/cmake-2.8/Modules/Platform/Linux-GNU-CXX.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\usr\share\cmake-2.8\Modules\Platform\" />
+      </Unit>
+      <Unit filename="/home/mariya/knitter/../../../usr/share/cmake-2.8/Modules/Platform/Linux-GNU.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\usr\share\cmake-2.8\Modules\Platform\" />
+      </Unit>
+      <Unit filename="/home/mariya/knitter/../../../usr/share/cmake-2.8/Modules/Compiler/GNU-C.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\usr\share\cmake-2.8\Modules\Compiler\" />
+      </Unit>
+      <Unit filename="/home/mariya/knitter/../../../usr/share/cmake-2.8/Modules/Compiler/GNU.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\usr\share\cmake-2.8\Modules\Compiler\" />
+      </Unit>
+      <Unit filename="/home/mariya/knitter/../../../usr/share/cmake-2.8/Modules/Compiler/GNU-CXX.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\usr\share\cmake-2.8\Modules\Compiler\" />
+      </Unit>
+      <Unit filename="/home/mariya/knitter/../../../usr/share/cmake-2.8/Modules/Compiler/GNU.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\usr\share\cmake-2.8\Modules\Compiler\" />
+      </Unit>
+      <Unit filename="/home/mariya/knitter/src/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\src\" />
+      </Unit>
+   </Project>
+</CodeBlocks_project_file>
