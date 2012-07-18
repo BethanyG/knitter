@@ -16,26 +16,45 @@ TestGLCanvas::TestGLCanvas(wxWindow *parent, wxWindowID id,
 }
 
 void TestGLCanvas::Init() {
-  static const GLfloat ambient[4] = {0.0f, 0.0f, 0.0f, 1.0f};
-  static const GLfloat diffuse[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+  static const GLfloat ambient0[4] = {0.05f, 0.05f, 0.05f, 1.0f};
+  static const GLfloat diffuse0[4] = {1.0f, 1.0f, 1.0f, 1.0f};
   static const GLfloat position0[4] = {7.0, 7.0, 7.0f, 0.0f};
+  static const GLfloat ambient1[4] = {0.05f, 0.05f, 0.05f, 1.0f};
+  static const GLfloat diffuse1[4] = {0.25f, 0.25f, 0.25f, 1.0f};
+  static const GLfloat position1[4] = {-1.0, -1.0, 7.0f, 0.0f};
 
   static const GLfloat front_mat_shininess[1] = {60.0f};
   static const GLfloat front_mat_specular[4] = {0.2f, 0.2f, 0.2f, 1.0f};
-  static const GLfloat front_mat_diffuse[4] = {0.6f, 0.0f, 0.8f, 1.0f};
+//  static const GLfloat front_mat_diffuse[4] = {0.6f, 0.0f, 0.8f, 1.0f};
+//  static const GLfloat front_mat_diffuse[4] = {0.58f, 0.2f, 0.038f, 1.0f}; // brown
+  static const GLfloat front_mat_diffuse[4] = {0.58f, 0.3f, 0.038f, 1.0f}; // brown-yellow
+//  static const GLfloat front_mat_diffuse[4] = {0.89f, 0.61f, 0.11f, 1.0f}; // yellow
+//  static const GLfloat front_mat_diffuse[4] = {0.33f, 0.04f, 0.76f, 1.0f}; // blue
   static const GLfloat lmodel_ambient[4] = {0.0f, 0.0f, 0.0f, 1.0f};
 
-  glClearColor(0.7f, 0.3f, 0.9f, 0.0f);
+//  glClearColor(0.7f, 0.3f, 0.9f, 0.0f);
+  glClearColor(1.0f, 0.94f, 0.695f, 0);
+
+// model  - background
+// 68dd21 - 0091e5
+// 953217 - fff1b2
+// e49b1d - fff1b2
+// 7720c1 - fff1b2
 
   glEnable(GL_DEPTH_TEST);
 //  glPolygonMode(GL_FRONT, GL_LINE);
 //  glPolygonMode(GL_BACK, GL_LINE);
-
   glEnable(GL_NORMALIZE);
-  glLightfv(GL_LIGHT5, GL_AMBIENT, ambient);
-  glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
+
+  glLightfv(GL_LIGHT0, GL_AMBIENT, ambient0);
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse0);
   glLightfv(GL_LIGHT0, GL_POSITION, position0);
   glEnable(GL_LIGHT0);
+
+  glLightfv(GL_LIGHT1, GL_AMBIENT, ambient1);
+  glLightfv(GL_LIGHT1, GL_DIFFUSE, diffuse1);
+  glLightfv(GL_LIGHT1, GL_POSITION, position1);
+  glEnable(GL_LIGHT1);
 
   glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
   glEnable(GL_LIGHTING);
