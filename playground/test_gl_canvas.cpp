@@ -16,12 +16,12 @@ TestGLCanvas::TestGLCanvas(wxWindow *parent, wxWindowID id,
 }
 
 void TestGLCanvas::Init() {
-  static const GLfloat ambient0[4] = {0.05f, 0.05f, 0.05f, 1.0f};
+  static const GLfloat ambient0[4] = {0.5f, 0.5f, 0.5f, 1.0f};
   static const GLfloat diffuse0[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-  static const GLfloat position0[4] = {7.0, 7.0, 7.0f, 0.0f};
+  static const GLfloat position0[4] = {1.0, 1.0, 1.0f, 0.0f};
   static const GLfloat ambient1[4] = {0.05f, 0.05f, 0.05f, 1.0f};
   static const GLfloat diffuse1[4] = {0.25f, 0.25f, 0.25f, 1.0f};
-  static const GLfloat position1[4] = {-1.0, -1.0, 7.0f, 0.0f};
+  static const GLfloat position1[4] = {-1.0, -1.0, 1.0f, 0.0f};
 
   static const GLfloat front_mat_shininess[1] = {60.0f};
   static const GLfloat front_mat_specular[4] = {0.2f, 0.2f, 0.2f, 1.0f};
@@ -59,6 +59,7 @@ void TestGLCanvas::Init() {
   glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
   glEnable(GL_LIGHTING);
 
+  //glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
   glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, front_mat_shininess);
   glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, front_mat_specular);
   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, front_mat_diffuse);
@@ -93,6 +94,8 @@ void TestGLCanvas::draw_surface() {
 //      }
 //    }
 //  }
+  glEnable(GL_AUTO_NORMAL);
+
   GLfloat r = 1.0;
   GLfloat a = 0.25;
   GLfloat ctrlpoints[19][3] = {
@@ -128,12 +131,55 @@ void TestGLCanvas::draw_surface() {
   {{-1, l, 1}, {-0.5, l, 1}, {0.5, l, 1}, {1, l, 1}},
   {{-1, 0, 1}, {-0.5, 0, 1}, {0.5, 0, 1}, {1, 0, 1}},
   };
-  glMap2f(GL_MAP2_VERTEX_3, 0, 1, 3, 4,
-          0, 1, 12, 4, &ctrlpoints2[0][0][0]);
   glEnable(GL_MAP2_VERTEX_3);
-  glMapGrid2f(n, 0.0, 1.0, n, 0.0, 1.0);
-  glEvalMesh2(GL_LINE, 0, n, 0, n);
 
+//  glMap2f(GL_MAP2_VERTEX_3, 0, 1, 3, 4,
+//          0, 1, 12, 4, &ctrlpoints2[0][0][0]);
+//  glMapGrid2f(n, 0.0, 1.0, n, 0.0, 1.0);
+//  glEvalMesh2(GL_FILL, 0, n, 0, n);
+
+  n = 10;
+  GLfloat t = 0.5;
+
+  for (int k = 0; k < 6; ++k) {
+    for (int i = 0; i < 4; ++i) {
+      ctrlpoints2[0][i][0] = ctrlpoints[k * 3 + i][0];
+      ctrlpoints2[0][i][1] = ctrlpoints[k * 3 + i][1];
+      ctrlpoints2[0][i][2] = ctrlpoints[k * 3 + i][2] - t;
+      ctrlpoints2[1][i][0] = ctrlpoints[k * 3 + i][0];
+      ctrlpoints2[1][i][1] = ctrlpoints[k * 3 + i][1] + t * l;
+      ctrlpoints2[1][i][2] = ctrlpoints[k * 3 + i][2] - t;
+      ctrlpoints2[2][i][0] = ctrlpoints[k * 3 + i][0];
+      ctrlpoints2[2][i][1] = ctrlpoints[k * 3 + i][1] + t * l;
+      ctrlpoints2[2][i][2] = ctrlpoints[k * 3 + i][2] + t;
+      ctrlpoints2[3][i][0] = ctrlpoints[k * 3 + i][0];
+      ctrlpoints2[3][i][1] = ctrlpoints[k * 3 + i][1];
+      ctrlpoints2[3][i][2] = ctrlpoints[k * 3 + i][2] + t;
+    }
+    glMap2f(GL_MAP2_VERTEX_3, 0, 1, 3, 4,
+            0, 1, 12, 4, &ctrlpoints2[0][0][0]);
+    glMapGrid2f(n, 0.0, 1.0, n, 0.0, 1.0);
+    glEvalMesh2(GL_FILL, 0, n, 0, n);
+
+    for (int i = 0; i < 4; ++i) {
+      ctrlpoints2[0][i][0] = ctrlpoints[k * 3 + i][0];
+      ctrlpoints2[0][i][1] = ctrlpoints[k * 3 + i][1];
+      ctrlpoints2[0][i][2] = ctrlpoints[k * 3 + i][2] - t;
+      ctrlpoints2[1][i][0] = ctrlpoints[k * 3 + i][0];
+      ctrlpoints2[1][i][1] = ctrlpoints[k * 3 + i][1] - t * l;
+      ctrlpoints2[1][i][2] = ctrlpoints[k * 3 + i][2] - t;
+      ctrlpoints2[2][i][0] = ctrlpoints[k * 3 + i][0];
+      ctrlpoints2[2][i][1] = ctrlpoints[k * 3 + i][1] - t * l;
+      ctrlpoints2[2][i][2] = ctrlpoints[k * 3 + i][2] + t;
+      ctrlpoints2[3][i][0] = ctrlpoints[k * 3 + i][0];
+      ctrlpoints2[3][i][1] = ctrlpoints[k * 3 + i][1];
+      ctrlpoints2[3][i][2] = ctrlpoints[k * 3 + i][2] + t;
+    }
+    glMap2f(GL_MAP2_VERTEX_3, 0, 1, 3, 4,
+            0, 1, 12, 4, &ctrlpoints2[0][0][0]);
+    glMapGrid2f(n, 0.0, 1.0, n, 0.0, 1.0);
+    glEvalMesh2(GL_LINE, 0, n, 0, n);
+  }
 }
 
 void TestGLCanvas::draw_scene() {
