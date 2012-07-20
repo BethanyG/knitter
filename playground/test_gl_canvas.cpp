@@ -69,7 +69,7 @@ void TestGLCanvas::Init() {
 //  glOrtho(-2 * r, _model->get_xc() * 2 * 4 * r + 2 * r,
 //          -2 * r, _model->get_yc() * 2 * 4 * r + 2 * r,
 //          0.1, 25.0);
-  glOrtho(-2, 2, -2, 2, 0.1, 25.0);
+  glOrtho(-2, 2, -2, 2, 0.1, 25);
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
@@ -120,6 +120,20 @@ void TestGLCanvas::draw_surface() {
     glMapGrid1f(n, 0.0, 1.0);
     glEvalMesh1(GL_LINE, 0, n);
   }
+
+  GLfloat l = 1.35;
+  GLfloat ctrlpoints2[4][4][3] = {
+  {{-1, 0, -1}, {-0.5, 0, -1}, {0.5, 0, -1}, {1, 0, -1}},
+  {{-1, l, -1}, {-0.5, l, -1}, {0.5, l, -1}, {1, l, -1}},
+  {{-1, l, 1}, {-0.5, l, 1}, {0.5, l, 1}, {1, l, 1}},
+  {{-1, 0, 1}, {-0.5, 0, 1}, {0.5, 0, 1}, {1, 0, 1}},
+  };
+  glMap2f(GL_MAP2_VERTEX_3, 0, 1, 3, 4,
+          0, 1, 12, 4, &ctrlpoints2[0][0][0]);
+  glEnable(GL_MAP2_VERTEX_3);
+  glMapGrid2f(n, 0.0, 1.0, n, 0.0, 1.0);
+  glEvalMesh2(GL_LINE, 0, n, 0, n);
+
 }
 
 void TestGLCanvas::draw_scene() {
