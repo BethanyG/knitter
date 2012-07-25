@@ -80,20 +80,6 @@ void TestGLCanvas::Init() {
 
 
 void TestGLCanvas::draw_surface() {
-//  GLint i;
-//  if (_model) {
-//    for (int k = 0; k < _model->get_rows(); k++) {
-//      for (int l = 0; l < _model->get_columns(); l++) {
-//        glBegin(GL_TRIANGLE_STRIP);
-//        // TODO: rewrite this part - impossible behaviour!
-//        for (i = 0; i < _model->_numverts[k][l]; i++) {
-//          glNormal3fv(_model->_norms[k][l][i]);
-//          glVertex3fv(_model->_verts[k][l][i]);
-//        }
-//        glEnd();
-//      }
-//    }
-//  }
   glEnable(GL_AUTO_NORMAL);
 
   GLfloat r = 1.0;
@@ -124,37 +110,95 @@ void TestGLCanvas::draw_surface() {
     glEvalMesh1(GL_LINE, 0, n);
   }
 
+  glEnable(GL_MAP2_VERTEX_3);
   GLfloat l = 1.35;
   GLfloat ctrlpoints2[4][4][3] = {
-  {{-1, 0, -1}, {-0.5, 0, -1}, {0.5, 0, -1}, {1, 0, -1}},
-  {{-1, l, -1}, {-0.5, l, -1}, {0.5, l, -1}, {1, l, -1}},
-  {{-1, l, 1}, {-0.5, l, 1}, {0.5, l, 1}, {1, l, 1}},
-  {{-1, 0, 1}, {-0.5, 0, 1}, {0.5, 0, 1}, {1, 0, 1}},
+  {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}},
+  {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}},
+  {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}},
+  {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}},
   };
-  glEnable(GL_MAP2_VERTEX_3);
-
-//  glMap2f(GL_MAP2_VERTEX_3, 0, 1, 3, 4,
-//          0, 1, 12, 4, &ctrlpoints2[0][0][0]);
-//  glMapGrid2f(n, 0.0, 1.0, n, 0.0, 1.0);
-//  glEvalMesh2(GL_FILL, 0, n, 0, n);
 
   n = 10;
-  GLfloat t = 0.5;
+  GLfloat t = 0.25;
+
+  float delta[2][6][4][4][3] = {{
+  {
+    {{0, 0, t}, {0, 0, t}, {0, 0, t}, {0, 0, t}},                       // line 0 of segment 0
+    {{0, t * l, t}, {0, t * l, t}, {-t * l, 0, t}, {-t * l, 0, t}},     // line 2 of segment 0
+    {{0, t * l, -t}, {0, t * l, -t}, {-t * l, 0, -t}, {-t * l, 0, -t}}, // etc
+    {{0, 0, -t}, {0, 0, -t}, {0, 0, -t}, {0, 0, -t}}
+  }, {
+    {{0, 0, t}, {0, 0, t}, {0, 0, t}, {0, 0, t}},                       // line 0 of segment 1
+    {{-t * l, 0, t}, {-t * l, 0, t}, {-t * l, 0, t}, {-t * l, 0, t}},   // etc
+    {{-t * l, 0, -t}, {-t * l, 0, -t}, {-t * l, 0, -t}, {-t * l, 0, -t}},
+    {{0, 0, -t}, {0, 0, -t}, {0, 0, -t}, {0, 0, -t}}
+  }, {
+    {{0, 0, t}, {0, 0, t}, {0, 0, t}, {0, 0, t}},
+    {{-t * l, 0, t}, {-t * l, 0, t}, {0, t * l, t}, {0, t * l, t}},
+    {{-t * l, 0, -t}, {-t * l, 0, -t}, {0, t * l, -t}, {0, t * l, -t}},
+    {{0, 0, -t}, {0, 0, -t}, {0, 0, -t}, {0, 0, -t}}
+  }, {
+    {{0, 0, t}, {0, 0, t}, {0, 0, t}, {0, 0, t}},
+    {{0, t * l, t}, {0, t * l, t}, {t * l, 0, t}, {t * l, 0, t}},
+    {{0, t * l, -t}, {0, t * l, -t}, {t * l, 0, -t}, {t * l, 0, -t}},
+    {{0, 0, -t}, {0, 0, -t}, {0, 0, -t}, {0, 0, -t}}
+  }, {
+    {{0, 0, t}, {0, 0, t}, {0, 0, t}, {0, 0, t}},
+    {{t * l, 0, t}, {t * l, 0, t}, {t * l, 0, t}, {t * l, 0, t}},
+    {{t * l, 0, -t}, {t * l, 0, -t}, {t * l, 0, -t}, {t * l, 0, -t}},
+    {{0, 0, -t}, {0, 0, -t}, {0, 0, -t}, {0, 0, -t}}
+  }, {
+    {{0, 0, t}, {0, 0, t}, {0, 0, t}, {0, 0, t}},
+    {{t * l, 0, t}, {t * l, 0, t}, {0, t * l, t}, {0, t * l, t}},
+    {{t * l, 0, -t}, {t * l, 0, -t}, {0, t * l, -t}, {0, t * l, -t}},
+    {{0, 0, -t}, {0, 0, -t}, {0, 0, -t}, {0, 0, -t}}
+  }
+  }, {
+  {
+    {{0, 0, -t}, {0, 0, -t}, {0, 0, -t}, {0, 0, -t}},                   // line 0 of segment 0
+    {{0, -t * l, -t}, {0, -t * l, -t}, {t * l, 0, -t}, {t * l, 0, -t}}, // line 2 of segment 0
+    {{0, -t * l, t}, {0, -t * l, t}, {t * l, 0, t}, {t * l, 0, t}},     // etc
+    {{0, 0, t}, {0, 0, t}, {0, 0, t}, {0, 0, t}}
+  }, {
+    {{0, 0, -t}, {0, 0, -t}, {0, 0, -t}, {0, 0, -t}},                   // line 0 of segment 1
+    {{t * l, 0, -t}, {t * l, 0, -t}, {t * l, 0, -t}, {t * l, 0, -t}},   // etc
+    {{t * l, 0, t}, {t * l, 0, t}, {t * l, 0, t}, {t * l, 0, t}},
+    {{0, 0, t}, {0, 0, t}, {0, 0, t}, {0, 0, t}}
+  }, {
+    {{0, 0, -t}, {0, 0, -t}, {0, 0, -t}, {0, 0, -t}},
+    {{t * l, 0, -t}, {t * l, 0, -t}, {0, -t * l, -t}, {0, -t * l, -t}},
+    {{t * l, 0, t}, {t * l, 0, t}, {0, -t * l, t}, {0, -t * l, t}},
+    {{0, 0, t}, {0, 0, t}, {0, 0, t}, {0, 0, t}}
+  }, {
+    {{0, 0, -t}, {0, 0, -t}, {0, 0, -t}, {0, 0, -t}},
+    {{0, -t * l, -t}, {0, -t * l, -t}, {-t * l, 0, -t}, {-t * l, 0, -t}},
+    {{0, -t * l, t}, {0, -t * l, t}, {-t * l, 0, t}, {-t * l, 0, t}},
+    {{0, 0, t}, {0, 0, t}, {0, 0, t}, {0, 0, t}}
+  }, {
+    {{0, 0, -t}, {0, 0, -t}, {0, 0, -t}, {0, 0, -t}},
+    {{-t * l, 0, -t}, {-t * l, 0, -t}, {-t * l, 0, -t}, {-t * l, 0, -t}},
+    {{-t * l, 0, t}, {-t * l, 0, t}, {-t * l, 0, t}, {-t * l, 0, t}},
+    {{0, 0, t}, {0, 0, t}, {0, 0, t}, {0, 0, t}}
+  }, {
+    {{0, 0, -t}, {0, 0, -t}, {0, 0, -t}, {0, 0, -t}},
+    {{-t * l, 0, -t}, {-t * l, 0, -t}, {0, -t * l, -t}, {0, -t * l, -t}},
+    {{-t * l, 0, t}, {-t * l, 0, t}, {0, -t * l, t}, {0, -t * l, t}},
+    {{0, 0, t}, {0, 0, t}, {0, 0, t}, {0, 0, t}}
+  }}};
+
+// k - segment of curve
+// s - number of line inside one side of segment (semi-tube) k
+// i - number of base point on line s
+// j - coordinate of base point i
 
   for (int k = 0; k < 6; ++k) {
-    for (int i = 0; i < 4; ++i) {
-      ctrlpoints2[0][i][0] = ctrlpoints[k * 3 + i][0];
-      ctrlpoints2[0][i][1] = ctrlpoints[k * 3 + i][1];
-      ctrlpoints2[0][i][2] = ctrlpoints[k * 3 + i][2] - t;
-      ctrlpoints2[1][i][0] = ctrlpoints[k * 3 + i][0];
-      ctrlpoints2[1][i][1] = ctrlpoints[k * 3 + i][1] + t * l;
-      ctrlpoints2[1][i][2] = ctrlpoints[k * 3 + i][2] - t;
-      ctrlpoints2[2][i][0] = ctrlpoints[k * 3 + i][0];
-      ctrlpoints2[2][i][1] = ctrlpoints[k * 3 + i][1] + t * l;
-      ctrlpoints2[2][i][2] = ctrlpoints[k * 3 + i][2] + t;
-      ctrlpoints2[3][i][0] = ctrlpoints[k * 3 + i][0];
-      ctrlpoints2[3][i][1] = ctrlpoints[k * 3 + i][1];
-      ctrlpoints2[3][i][2] = ctrlpoints[k * 3 + i][2] + t;
+    for (int s = 0; s < 4; ++s) {
+      for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 3; ++j) {
+          ctrlpoints2[s][i][j] = ctrlpoints[k * 3 + i][j] + delta[0][k][s][i][j];
+        }
+      }
     }
     glMap2f(GL_MAP2_VERTEX_3, 0, 1, 3, 4,
             0, 1, 12, 4, &ctrlpoints2[0][0][0]);
@@ -162,23 +206,16 @@ void TestGLCanvas::draw_surface() {
     glEvalMesh2(GL_FILL, 0, n, 0, n);
 
     for (int i = 0; i < 4; ++i) {
-      ctrlpoints2[0][i][0] = ctrlpoints[k * 3 + i][0];
-      ctrlpoints2[0][i][1] = ctrlpoints[k * 3 + i][1];
-      ctrlpoints2[0][i][2] = ctrlpoints[k * 3 + i][2] - t;
-      ctrlpoints2[1][i][0] = ctrlpoints[k * 3 + i][0];
-      ctrlpoints2[1][i][1] = ctrlpoints[k * 3 + i][1] - t * l;
-      ctrlpoints2[1][i][2] = ctrlpoints[k * 3 + i][2] - t;
-      ctrlpoints2[2][i][0] = ctrlpoints[k * 3 + i][0];
-      ctrlpoints2[2][i][1] = ctrlpoints[k * 3 + i][1] - t * l;
-      ctrlpoints2[2][i][2] = ctrlpoints[k * 3 + i][2] + t;
-      ctrlpoints2[3][i][0] = ctrlpoints[k * 3 + i][0];
-      ctrlpoints2[3][i][1] = ctrlpoints[k * 3 + i][1];
-      ctrlpoints2[3][i][2] = ctrlpoints[k * 3 + i][2] + t;
+      for (int j = 0; j < 3; ++j) {
+        for (int s = 0; s < 4; ++s) {
+          ctrlpoints2[s][i][j] = ctrlpoints[k * 3 + i][j] + delta[1][k][s][i][j];
+        }
+      }
     }
     glMap2f(GL_MAP2_VERTEX_3, 0, 1, 3, 4,
             0, 1, 12, 4, &ctrlpoints2[0][0][0]);
     glMapGrid2f(n, 0.0, 1.0, n, 0.0, 1.0);
-    glEvalMesh2(GL_LINE, 0, n, 0, n);
+    glEvalMesh2(GL_FILL, 0, n, 0, n);
   }
 }
 
