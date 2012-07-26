@@ -67,51 +67,53 @@ void TestGLCanvas::Init() {
   float r = _model->get_r();
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-//  glOrtho(-2 * r, _model->get_xc() * 2 * 4 * r + 2 * r,
-//          -2 * r, _model->get_yc() * 2 * 4 * r + 2 * r,
-//          0.1, 25.0);
-  glOrtho(-2, 2, -2, 2, 0.1, 25);
+  glOrtho(-2 * r, _model->get_columns() * 2 * r,
+          -2 * r, _model->get_rows() * 2 * r * 0.60,
+          0.1, 25.0);
+  //glOrtho(-2, 2, -2, 2, 0.1, 25);
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-//  glTranslatef(_model->get_xc(), _model->get_yc(), -6.0);
-  glTranslatef(0, 0, -6.0);
+  glTranslatef(_model->get_xc(), _model->get_yc(), -6.0);
+  //glTranslatef(0, 0, -6.0);
 }
 
 
 void TestGLCanvas::draw_surface() {
   glEnable(GL_AUTO_NORMAL);
 
-  GLfloat r = 1.0;
-  GLfloat a = 0.25;
-  GLfloat ctrlpoints[19][3] = {
-        {-r, -r, 0},
-        {-r + a, -r, 0}, {-0.25 * r, -0.5 * r - a,  0},
-        {-0.25 * r, -0.5 * r, 0},
-        {-0.25 * r, -0.5 * r + a, 0}, {-0.75 * r, 0.5 * r - a, 0},
-        {-0.75 * r, 0.5 * r, 0},
-        {-0.75 * r, 0.5 * r + a, 0}, {-a, r, 0},
-        {0, r, 0},
-        {a, r, 0}, {0.75 * r, 0.5 * r + a, 0},
-        {0.75 * r, 0.5 * r, 0},
-        {0.75 * r, 0.5 * r - a, 0}, {0.25 * r, -0.5 * r + a, 0},
-        {0.25 * r, -0.5 * r, 0},
-        {0.25 * r, -0.5 * r - a,  0}, {r - a, -r, 0},
-        {r, -r, 0}
-        };
-  glEnable(GL_MAP1_VERTEX_3);
-  glClear(GL_COLOR_BUFFER_BIT);
-  glColor3f(1.0, 1.0, 1.0);
-  int n = 25;
-
-  for (int k = 0; k < 6; ++k) {
-    glMap1f(GL_MAP1_VERTEX_3, 0.0, 1.0, 3, 4, &ctrlpoints[k * 3][0]);
-    glMapGrid1f(n, 0.0, 1.0);
-    glEvalMesh1(GL_LINE, 0, n);
-  }
+//  GLfloat r = 1.0;
+//  GLfloat a = 0.25;
+//  GLfloat ctrlpoints[19][3] = {
+//        {-r, -r, 0},
+//        {-r + a, -r, 0}, {-0.25 * r, -0.5 * r - a,  0},
+//        {-0.25 * r, -0.5 * r, 0},
+//        {-0.25 * r, -0.5 * r + a, 0}, {-0.75 * r, 0.5 * r - a, 0},
+//        {-0.75 * r, 0.5 * r, 0},
+//        {-0.75 * r, 0.5 * r + a, 0}, {-a, r, 0},
+//        {0, r, 0},
+//        {a, r, 0}, {0.75 * r, 0.5 * r + a, 0},
+//        {0.75 * r, 0.5 * r, 0},
+//        {0.75 * r, 0.5 * r - a, 0}, {0.25 * r, -0.5 * r + a, 0},
+//        {0.25 * r, -0.5 * r, 0},
+//        {0.25 * r, -0.5 * r - a,  0}, {r - a, -r, 0},
+//        {r, -r, 0}
+//        };
+//  glEnable(GL_MAP1_VERTEX_3);
+//  glClear(GL_COLOR_BUFFER_BIT);
+//  glColor3f(1.0, 1.0, 1.0);
+//  int n = 25;
+//
+//  for (int k = 0; k < 6; ++k) {
+//    glMap1f(GL_MAP1_VERTEX_3, 0.0, 1.0, 3, 4, &ctrlpoints[k * 3][0]);
+//    glMapGrid1f(n, 0.0, 1.0);
+//    glEvalMesh1(GL_LINE, 0, n);
+//  }
 
   glEnable(GL_MAP2_VERTEX_3);
   GLfloat l = 1.35;
+  int n = 10;
+  GLfloat t = 0.25;
   GLfloat ctrlpoints2[4][4][3] = {
   {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}},
   {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}},
@@ -119,8 +121,6 @@ void TestGLCanvas::draw_surface() {
   {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}},
   };
 
-  n = 10;
-  GLfloat t = 0.25;
 
   float delta[2][6][4][4][3] = {{
   {
@@ -192,11 +192,14 @@ void TestGLCanvas::draw_surface() {
 // i - number of base point on line s
 // j - coordinate of base point i
 
+  for (int row = 0; row < _model->get_rows(); ++row) {
+  for (int column = 0; column < _model->get_columns(); ++column) {
+
   for (int k = 0; k < 6; ++k) {
     for (int s = 0; s < 4; ++s) {
       for (int i = 0; i < 4; ++i) {
         for (int j = 0; j < 3; ++j) {
-          ctrlpoints2[s][i][j] = ctrlpoints[k * 3 + i][j] + delta[0][k][s][i][j];
+          ctrlpoints2[s][i][j] = _model->_traces[row][column][k * 3 + i][j] + delta[0][k][s][i][j];
         }
       }
     }
@@ -208,7 +211,7 @@ void TestGLCanvas::draw_surface() {
     for (int i = 0; i < 4; ++i) {
       for (int j = 0; j < 3; ++j) {
         for (int s = 0; s < 4; ++s) {
-          ctrlpoints2[s][i][j] = ctrlpoints[k * 3 + i][j] + delta[1][k][s][i][j];
+          ctrlpoints2[s][i][j] = _model->_traces[row][column][k * 3 + i][j] + delta[1][k][s][i][j];
         }
       }
     }
@@ -217,6 +220,9 @@ void TestGLCanvas::draw_surface() {
     glMapGrid2f(n, 0.0, 1.0, n, 0.0, 1.0);
     glEvalMesh2(GL_FILL, 0, n, 0, n);
   }
+
+  }
+  }
 }
 
 void TestGLCanvas::draw_scene() {
@@ -224,7 +230,7 @@ void TestGLCanvas::draw_scene() {
   glPushMatrix();
   glRotatef(_yrot, 0.0f, 1.0f, 0.0f);
   glRotatef(_xrot, 1.0f, 0.0f, 0.0f);
-//  glTranslatef(-_model->get_xc(), -_model->get_yc(), 0.0f);
+  glTranslatef(-_model->get_xc(), -_model->get_yc(), 0.0f);
   glTranslatef(0, 0, 0);
   draw_surface();
   glPopMatrix();

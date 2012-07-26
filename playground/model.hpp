@@ -19,9 +19,10 @@ class Model {
   float _yc;
   int _rows;
   int _columns;
-  GLfloat _verts[MAXROWS][MAXCOLUMNS][10000][3];
-  GLfloat _norms[MAXROWS][MAXCOLUMNS][10000][3];
-  GLint _numverts[MAXROWS][MAXCOLUMNS];
+//  GLfloat _verts[MAXROWS][MAXCOLUMNS][10000][3];
+//  GLfloat _norms[MAXROWS][MAXCOLUMNS][10000][3];
+//  GLint _numverts[MAXROWS][MAXCOLUMNS];
+  GLfloat _traces[MAXROWS][MAXCOLUMNS][19][3];
   Point3D _centres[MAXROWS][MAXCOLUMNS];
 
  public:
@@ -30,20 +31,21 @@ class Model {
     _columns = pattern.get_columns();
     for (int k = 0; k < _rows; k++) {
       for (int l = 0; l < _columns; l++) {
-        _centres[k][l] = Point3D(2 * r + l * 4 * _r,
-                                 2 * r + k * (3 * _r - _a), 0);
+        _centres[k][l] = Point3D(l * 2 * _r, k * (1.5 * _r - 3 * _a), 0);
       }
     }
     for (int k = 0; k < _rows; k++) {
       for (int l = 0; l < _columns; l++) {
-        Calculator::DrawCurvedTube(_a, _k, _r, pattern.get_stitch_at(k, l),
-                                   _centres[k][l],
-                                   _verts[k][l], _norms[k][l],
-                                   _numverts[k][l]);
+//        Calculator::DrawCurvedTube(_a, _k, _r, pattern.get_stitch_at(k, l),
+//                                   _centres[k][l],
+//                                   _verts[k][l], _norms[k][l],
+//                                   _numverts[k][l]);
+         Calculator::GetStitchTrace(_a, _k, _r, pattern.get_stitch_at(k, l),
+                                    _centres[k][l], _traces[k][l]);
       }
     }
-    _xc = pattern.get_columns() / 2.0;
-    _yc = pattern.get_rows() / 2.0 * 0.75 - _r;
+    _xc = (pattern.get_columns() - 1) * _r;
+    _yc = (pattern.get_rows() - 1) * (0.75 * _r - 1.5 * _a);
   }
 
   float get_r() {return _r;}

@@ -9,6 +9,8 @@ class Calculator {
  public:
   static void DrawCurvedTube(float a, float k, float r, Stitch st, Point3D c,
                              GLfloat verts[][3], GLfloat norms[][3], GLint& numverts);
+  static void GetStitchTrace(float a, float k, float r,
+                             Stitch st, Point3D c, GLfloat trace[][3]);
 
  private:
   static Vector CrossProduct(Vector a, Vector b);
