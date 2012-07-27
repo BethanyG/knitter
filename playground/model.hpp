@@ -31,7 +31,7 @@ class Model {
     _columns = pattern.get_columns();
     for (int k = 0; k < _rows; k++) {
       for (int l = 0; l < _columns; l++) {
-        _centres[k][l] = Point3D(l * 2 * _r, k * (1.5 * _r - 3 * _a), 0);
+        _centres[k][l] = Point3D(l * 2 * _r, k * (1.5 * _r - 1.0 * _a), 0);
       }
     }
     for (int k = 0; k < _rows; k++) {
@@ -45,7 +45,7 @@ class Model {
       }
     }
     _xc = (pattern.get_columns() - 1) * _r;
-    _yc = (pattern.get_rows() - 1) * (0.75 * _r - 1.5 * _a);
+    _yc = (pattern.get_rows() - 1) * 0.75 * _r;
   }
 
   float get_r() {return _r;}

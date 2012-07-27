@@ -44,7 +44,7 @@ bool MyApp::OnInit() {
 //  Pattern pattern("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-", 8, 8);
 //  Pattern pattern("+-+-+-+--+-+-+-++-+-+-+--+-+-+-++-+-+-+--+-+-+-++-+-+-+--+-+-+-+", 8, 8);
 
-  Model* model = new Model(0.2, 0.7, 1, pattern);
+  Model* model = new Model(0.3, 0.7, 1, pattern);
 
   frame->m_canvas = new TestGLCanvas(frame, wxID_ANY, wxDefaultPosition,
                                      wxDefaultSize, 0, _T("TestGLCanvas"),

@@ -201,30 +201,32 @@ void Calculator::DrawCurvedTube(float a, float k, float r, Stitch st, Point3D c,
 
 void Calculator::GetStitchTrace(float a, float k, float r,
                                 Stitch st, Point3D c, GLfloat trace[][3]) {
+  float s = r * 0.4;
   GLfloat ctrlpoints[19][3] = {
         {-r, -r, 0},
-        {-r + a, -r, 0}, {-(1 - k) * r, -0.5 * r - a,  0},
+        {-r + s, -r, 0}, {-(1 - k) * r, -0.5 * r - s,  0},
         {-(1 - k) * r, -0.5 * r, 0},
-        {-(1 - k) * r, -0.5 * r + a, 0}, {-k * r, 0.5 * r - a, 0},
+        {-(1 - k) * r, -0.5 * r + s, 0}, {-k * r, 0.5 * r - s, 0},
         {-k * r, 0.5 * r, 0},
-        {-k * r, 0.5 * r + a, 0}, {-a, r, 0},
+        {-k * r, 0.5 * r + s, 0}, {-s, r, 0},
         {0, r, 0},
-        {a, r, 0}, {k * r, 0.5 * r + a, 0},
+        {s, r, 0}, {k * r, 0.5 * r + s, 0},
         {k * r, 0.5 * r, 0},
-        {k * r, 0.5 * r - a, 0}, {(1 - k) * r, -0.5 * r + a, 0},
+        {k * r, 0.5 * r - s, 0}, {(1 - k) * r, -0.5 * r + s, 0},
         {(1 - k) * r, -0.5 * r, 0},
-        {(1 - k) * r, -0.5 * r - a,  0}, {r - a, -r, 0},
+        {(1 - k) * r, -0.5 * r - s,  0}, {r - s, -r, 0},
         {r, -r, 0}
         };
+  float coef = 1.2;
   float bottom = 0;
   switch (st.get_bottom()) {
-    case BACK_STITCH_TYPE: bottom = a * 3; break;
-    case FACE_STITCH_TYPE: bottom = -a * 3; break;
+    case BACK_STITCH_TYPE: bottom = a * coef; break;
+    case FACE_STITCH_TYPE: bottom = -a * coef; break;
   }
   float top = 0;
   switch (st.get_self()) {
-    case BACK_STITCH_TYPE: top = a * 3; break;
-    case FACE_STITCH_TYPE: top = -a * 3; break;
+    case BACK_STITCH_TYPE: top = a * coef; break;
+    case FACE_STITCH_TYPE: top = -a * coef; break;
   }
   bool left_change = (st.get_left() == OPPOSITE_STITCH_TYPE);
   bool right_change = (st.get_right() == OPPOSITE_STITCH_TYPE);
@@ -238,17 +240,17 @@ void Calculator::GetStitchTrace(float a, float k, float r,
     trace[1][2] += bottom;
     trace[17][2] += bottom;
     trace[18][2] += bottom;
-    trace[0][1] += a;
-    trace[1][1] += a;
-    trace[17][1] += a;
-    trace[18][1] += a;
+//    trace[0][1] += a;
+//    trace[1][1] += a;
+//    trace[17][1] += a;
+//    trace[18][1] += a;
   }
   if (top != 0) {
     trace[8][2] += top;
     trace[9][2] += top;
     trace[10][2] += top;
-    trace[8][1] -= a;
-    trace[9][1] -= a;
-    trace[10][1] -= a;
+//    trace[8][1] -= a;
+//    trace[9][1] -= a;
+//    trace[10][1] -= a;
   }
 }

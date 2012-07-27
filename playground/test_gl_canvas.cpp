@@ -68,7 +68,7 @@ void TestGLCanvas::Init() {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glOrtho(-2 * r, _model->get_columns() * 2 * r,
-          -2 * r, _model->get_rows() * 2 * r * 0.60,
+          -2 * r, _model->get_rows() * 2 * r * 0.75,
           0.1, 25.0);
   //glOrtho(-2, 2, -2, 2, 0.1, 25);
 
@@ -112,8 +112,8 @@ void TestGLCanvas::draw_surface() {
 
   glEnable(GL_MAP2_VERTEX_3);
   GLfloat l = 1.35;
-  int n = 10;
-  GLfloat t = 0.25;
+  int n = 25;
+  GLfloat t = _model->_a;
   GLfloat ctrlpoints2[4][4][3] = {
   {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}},
   {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}},
@@ -125,8 +125,8 @@ void TestGLCanvas::draw_surface() {
   float delta[2][6][4][4][3] = {{
   {
     {{0, 0, t}, {0, 0, t}, {0, 0, t}, {0, 0, t}},                       // line 0 of segment 0
-    {{0, t * l, t}, {0, t * l, t}, {-t * l, 0, t}, {-t * l, 0, t}},     // line 2 of segment 0
-    {{0, t * l, -t}, {0, t * l, -t}, {-t * l, 0, -t}, {-t * l, 0, -t}}, // etc
+    {{0, t * l, t}, {-t, t * l, t}, {-t * l, t, t}, {-t * l, 0, t}},     // line 2 of segment 0
+    {{0, t * l, -t}, {-t, t * l, -t}, {-t * l, t, -t}, {-t * l, 0, -t}}, // etc
     {{0, 0, -t}, {0, 0, -t}, {0, 0, -t}, {0, 0, -t}}
   }, {
     {{0, 0, t}, {0, 0, t}, {0, 0, t}, {0, 0, t}},                       // line 0 of segment 1
@@ -150,8 +150,8 @@ void TestGLCanvas::draw_surface() {
     {{0, 0, -t}, {0, 0, -t}, {0, 0, -t}, {0, 0, -t}}
   }, {
     {{0, 0, t}, {0, 0, t}, {0, 0, t}, {0, 0, t}},
-    {{t * l, 0, t}, {t * l, 0, t}, {0, t * l, t}, {0, t * l, t}},
-    {{t * l, 0, -t}, {t * l, 0, -t}, {0, t * l, -t}, {0, t * l, -t}},
+    {{t * l, 0, t}, {t * l, t, t}, {t, t * l, t}, {0, t * l, t}},
+    {{t * l, 0, -t}, {t * l, t, -t}, {t, t * l, -t}, {0, t * l, -t}},
     {{0, 0, -t}, {0, 0, -t}, {0, 0, -t}, {0, 0, -t}}
   }
   }, {
@@ -167,13 +167,13 @@ void TestGLCanvas::draw_surface() {
     {{0, 0, t}, {0, 0, t}, {0, 0, t}, {0, 0, t}}
   }, {
     {{0, 0, -t}, {0, 0, -t}, {0, 0, -t}, {0, 0, -t}},
-    {{t * l, 0, -t}, {t * l, 0, -t}, {0, -t * l, -t}, {0, -t * l, -t}},
-    {{t * l, 0, t}, {t * l, 0, t}, {0, -t * l, t}, {0, -t * l, t}},
+    {{t * l, 0, -t}, {t * l, -t, -t}, {t, -t * l, -t}, {0, -t * l, -t}},
+    {{t * l, 0, t}, {t * l, -t, t}, {t, -t * l, t}, {0, -t * l, t}},
     {{0, 0, t}, {0, 0, t}, {0, 0, t}, {0, 0, t}}
   }, {
     {{0, 0, -t}, {0, 0, -t}, {0, 0, -t}, {0, 0, -t}},
-    {{0, -t * l, -t}, {0, -t * l, -t}, {-t * l, 0, -t}, {-t * l, 0, -t}},
-    {{0, -t * l, t}, {0, -t * l, t}, {-t * l, 0, t}, {-t * l, 0, t}},
+    {{0, -t * l, -t}, {-t, -t * l, -t}, {-t * l, -t, -t}, {-t * l, 0, -t}},
+    {{0, -t * l, t}, {-t, -t * l, t}, {-t * l, -t, t}, {-t * l, 0, t}},
     {{0, 0, t}, {0, 0, t}, {0, 0, t}, {0, 0, t}}
   }, {
     {{0, 0, -t}, {0, 0, -t}, {0, 0, -t}, {0, 0, -t}},
