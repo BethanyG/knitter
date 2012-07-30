@@ -69,7 +69,7 @@ void TestGLCanvas::Init() {
   glLoadIdentity();
   glOrtho(-2 * r, _model->get_columns() * 2 * r,
           -2 * r, _model->get_rows() * 2 * r * 0.75,
-          0.1, 25.0);
+          -2.0, 25.0);
   //glOrtho(-2, 2, -2, 2, 0.1, 25);
 
   glMatrixMode(GL_MODELVIEW);
@@ -112,7 +112,7 @@ void TestGLCanvas::draw_surface() {
 
   glEnable(GL_MAP2_VERTEX_3);
   GLfloat l = 1.35;
-  int n = 25;
+  int n = 10;
   GLfloat t = _model->_a;
   GLfloat ctrlpoints2[4][4][3] = {
   {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}},

@@ -31,7 +31,7 @@ class Model {
     _columns = pattern.get_columns();
     for (int k = 0; k < _rows; k++) {
       for (int l = 0; l < _columns; l++) {
-        _centres[k][l] = Point3D(l * 2 * _r, k * (1.5 * _r - 1.0 * _a), 0);
+        _centres[k][l] = Point3D(l * 2 * _r, k * (1.5 * _r - 0.7 * _a), 0);
       }
     }
     for (int k = 0; k < _rows; k++) {
