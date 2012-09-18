@@ -5,8 +5,8 @@
 
 class Pattern {
   private:
-   const static int MAXROWS = 10;
-   const static int MAXCOLUMNS = 10;
+   const static int MAXROWS = 20;
+   const static int MAXCOLUMNS = 20;
 
   public:
     Pattern(const char* pattern, int rows, int columns);
